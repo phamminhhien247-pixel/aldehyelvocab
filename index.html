@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>VocabFlow</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- HEADER -->
+        <header class="top-bar">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    V
+                </div>
+
+                <div>
+                    <h1>VocabFlow</h1>
+                    <p>Learn smarter. Remember longer.</p>
+                </div>
+
+            </div>
+
+            <div class="header-actions">
+
+                <button
+                    id="addWordButton"
+                    class="add-word-button"
+                >
+                    ＋ Add Word
+                </button>
+
+                <div class="progress-info">
+                    <span id="counter">1 / 50</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- MEMORY MAP -->
+
+        <section class="memory-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Memory Map</h2>
+                    <p>Your vocabulary memory at a glance</p>
+                </div>
+
+                <div class="memory-stats">
+
+                    <span class="stat new">
+                        <b id="newCount">0</b> New
+                    </span>
+
+                    <span class="stat again">
+                        <b id="againCount">0</b> Need to learn
+                    </span>
+
+                    <span class="stat hard">
+                        <b id="hardCount">0</b> Difficult
+                    </span>
+
+                    <span class="stat good">
+                        <b id="goodCount">0</b> Learning
+                    </span>
+
+                    <span class="stat easy">
+                        <b id="easyCount">0</b> Mastered
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="memoryMap"
+                class="memory-map"
+            ></div>
+
+        </section>
+
+
+        <!-- PROGRESS -->
+
+        <section class="progress-section">
+
+            <div class="progress-label">
+
+                <span id="day">
+                    Day 1
+                </span>
+
+                <span id="sessionStatus">
+                    Ready to learn
+                </span>
+
+            </div>
+
+            <div class="progress-track">
+
+                <div
+                    id="progressBar"
+                    class="progress-fill"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FLASHCARD -->
+
+        <main class="flashcard">
+
+            <div class="card-top">
+
+                <span
+                    id="type"
+                    class="word-type"
+                >
+                    Phrasal Verb
+                </span>
+
+                <span class="card-label">
+                    ACTIVE RECALL
+                </span>
+
+            </div>
+
+
+            <div class="word-area">
+
+                <p class="word-hint">
+                    What does this mean?
+                </p>
+
+                <h2 id="word">
+                    give up
+                </h2>
+
+            </div>
+
+
+            <!-- RECALL PROMPT -->
+
+            <div
+                id="recallPrompt"
+                class="recall-prompt"
+            >
+
+                <div class="recall-icon">
+                    🧠
+                </div>
+
+                <div>
+
+                    <strong>
+                        Think before revealing
+                    </strong>
+
+                    <p>
+                        Try to remember the meaning,
+                        then check your answer.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ANSWER -->
+
+            <div
+                id="answer"
+                class="answer"
+            >
+
+                <div class="answer-section">
+
+                    <span class="answer-label">
+                        MEANING
+                    </span>
+
+                    <p id="meaning"></p>
+
+                </div>
+
+
+                <div class="answer-section">
+
+                    <span class="answer-label">
+                        EXAMPLE
+                    </span>
+
+                    <p id="example"></p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SHOW ANSWER -->
+
+            <button
+                id="showAnswer"
+                class="show-answer-btn"
+            >
+                Show Answer
+            </button>
+
+
+            <!-- RATING -->
+
+            <div
+                id="ratingButtons"
+                class="rating-buttons"
+            >
+
+                <p class="rating-title">
+                    How well did you remember it?
+                </p>
+
+
+                <div class="rating-grid">
+
+                    <button
+                        class="rating rating-again"
+                        data-rating="again"
+                    >
+                        <span>🔴</span>
+                        Again
+                        <small>Need to learn</small>
+                    </button>
+
+
+                    <button
+                        class="rating rating-hard"
+                        data-rating="hard"
+                    >
+                        <span>🟠</span>
+                        Hard
+                        <small>Difficult</small>
+                    </button>
+
+
+                    <button
+                        class="rating rating-good"
+                        data-rating="good"
+                    >
+                        <span>🟢</span>
+                        Good
+                        <small>Learning</small>
+                    </button>
+
+
+                    <button
+                        class="rating rating-easy"
+                        data-rating="easy"
+                    >
+                        <span>🔵</span>
+                        Easy
+                        <small>Mastered</small>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <div class="navigation">
+
+                <button
+                    id="previous"
+                    class="nav-btn"
+                >
+                    ← Previous
+                </button>
+
+
+                <div class="study-status">
+
+                    <span class="status-dot"></span>
+
+                    <span id="queueStatus">
+                        0 words to review
+                    </span>
+
+                </div>
+
+
+                <button
+                    id="next"
+                    class="nav-btn"
+                >
+                    Next →
+                </button>
+
+            </div>
+
+        </main>
+
+
+        <footer>
+            VocabFlow · Built for smarter vocabulary learning
+        </footer>
+
+    </div>
+
+
+    <!-- ADD WORD MODAL -->
+
+    <div
+        id="addWordModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-overlay"></div>
+
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2>Add a new word</h2>
+
+                    <p>
+                        Build your own vocabulary bank.
+                    </p>
+
+                </div>
+
+                <button
+                    id="closeModal"
+                    class="close-modal"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="addWordForm">
+
+                <label>
+                    Word / Phrase
+
+                    <input
+                        id="newWord"
+                        type="text"
+                        placeholder="e.g. broaden one's horizons"
+                        required
+                    >
+
+                </label>
+
+
+                <label>
+                    Meaning
+
+                    <input
+                        id="newMeaning"
+                        type="text"
+                        placeholder="e.g. mở rộng tầm nhìn"
+                        required
+                    >
+
+                </label>
+
+
+                <label>
+                    Example sentence
+
+                    <textarea
+                        id="newExample"
+                        placeholder="e.g. Travelling can broaden one's horizons."
+                    ></textarea>
+
+                </label>
+
+
+                <label>
+                    Type
+
+                    <select id="newType">
+
+                        <option>
+                            Vocabulary
+                        </option>
+
+                        <option>
+                            Phrasal Verb
+                        </option>
+
+                        <option>
+                            Collocation
+                        </option>
+
+                        <option>
+                            Idiom
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <button
+                    type="submit"
+                    class="create-word-button"
+                >
+                    Add Word
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
