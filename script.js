@@ -1,6 +1,7 @@
 // ======================================================
-// VOCABFLOW
+// VOCABFLOW v2
 // Vocabulary + Active Recall + SRS + Study Plan
+// + Quiz + Streak + Dashboard + Shuffle
 // ======================================================
 
 
@@ -83,7 +84,9 @@ let words = JSON.parse(
 if (!words) {
 
     words = defaultWords.map((item, index) => ({
+
         id: index + 1,
+
         word: item[0],
         meaning: item[1],
         example: item[2],
@@ -92,10 +95,15 @@ if (!words) {
 
         status: "new",
         rating: null,
+
         reviews: 0,
+
         nextReview: null,
 
-        createdByUser: false
+        createdByUser: false,
+
+        lastReviewed: null
+
     }));
 
     saveWords();
@@ -113,12 +121,18 @@ let studyPlan = JSON.parse(
 if (!studyPlan) {
 
     studyPlan = {
+
         wordsPerDay: 10,
+
         days: 15,
-        startDate: new Date().toISOString()
+
+        startDate:
+            new Date().toISOString()
+
     };
 
     saveStudyPlan();
+
 }
 
 
@@ -137,6 +151,10 @@ function saveStudyPlan() {
 // ======================================================
 
 let currentIndex = 0;
+
+let quizIndex = 0;
+
+let quizAnswered = false;
 
 
 // ======================================================
@@ -173,9 +191,6 @@ const answer =
 const recallPrompt =
     document.getElementById("recallPrompt");
 
-const ratingContainer =
-    document.getElementById("ratingButtons");
-
 const ratingButtons =
     document.querySelectorAll(".rating");
 
@@ -198,9 +213,7 @@ const dailyProgressBar =
     document.getElementById("dailyProgressBar");
 
 
-// ======================================================
-// STATS
-// ======================================================
+// stats
 
 const newCount =
     document.getElementById("newCount");
@@ -218,9 +231,22 @@ const easyCount =
     document.getElementById("easyCount");
 
 
-// ======================================================
-// ADD WORD
-// ======================================================
+// dashboard
+
+const streakCount =
+    document.getElementById("streakCount");
+
+const totalWords =
+    document.getElementById("totalWords");
+
+const masteredWords =
+    document.getElementById("masteredWords");
+
+const goalProgress =
+    document.getElementById("goalProgress");
+
+
+// Add word
 
 const addWordButton =
     document.getElementById("addWordButton");
@@ -247,9 +273,7 @@ const newType =
     document.getElementById("newType");
 
 
-// ======================================================
-// STUDY PLAN
-// ======================================================
+// Study plan
 
 const studyPlanButton =
     document.getElementById("studyPlanButton");
@@ -273,6 +297,36 @@ const saveStudyPlanButton =
     document.getElementById("saveStudyPlan");
 
 
+// Quiz
+
+const quizButton =
+    document.getElementById("quizButton");
+
+const quizModal =
+    document.getElementById("quizModal");
+
+const closeQuiz =
+    document.getElementById("closeQuiz");
+
+const quizWord =
+    document.getElementById("quizWord");
+
+const quizOptions =
+    document.getElementById("quizOptions");
+
+const quizResult =
+    document.getElementById("quizResult");
+
+const nextQuiz =
+    document.getElementById("nextQuiz");
+
+
+// Shuffle
+
+const shuffleButton =
+    document.getElementById("shuffleButton");
+
+
 // ======================================================
 // SAVE WORDS
 // ======================================================
@@ -283,6 +337,30 @@ function saveWords() {
         "vocabFlowWords",
         JSON.stringify(words)
     );
+
+}
+
+
+// ======================================================
+// DATE HELPERS
+// ======================================================
+
+function getDateKey(date = new Date()) {
+
+    return date.toISOString().split("T")[0];
+
+}
+
+
+function isToday(dateString) {
+
+    if (!dateString) {
+        return false;
+    }
+
+    return getDateKey(
+        new Date(dateString)
+    ) === getDateKey();
 
 }
 
@@ -310,6 +388,7 @@ function getStatusClass(word) {
     }
 
     return "";
+
 }
 
 
@@ -332,6 +411,7 @@ function getStatusText(status) {
     }
 
     return "New";
+
 }
 
 
@@ -343,45 +423,58 @@ function renderMemoryMap() {
 
     memoryMap.innerHTML = "";
 
-    words.forEach((word, index) => {
+    words.forEach(
+        (word, index) => {
 
-        const button =
-            document.createElement("button");
+            const button =
+                document.createElement("button");
 
-        button.className =
-            "memory-dot";
+            button.className =
+                "memory-dot";
 
-        const statusClass =
-            getStatusClass(word);
+            const statusClass =
+                getStatusClass(word);
 
-        if (statusClass) {
-            button.classList.add(statusClass);
-        }
+            if (statusClass) {
 
-        if (index === currentIndex) {
-            button.classList.add("current");
-        }
-
-        button.textContent =
-            index + 1;
-
-        button.title =
-            `${word.word} — ${getStatusText(word.status)}`;
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                currentIndex = index;
-
-                showCard();
+                button.classList.add(
+                    statusClass
+                );
 
             }
-        );
 
-        memoryMap.appendChild(button);
+            if (index === currentIndex) {
 
-    });
+                button.classList.add(
+                    "current"
+                );
+
+            }
+
+            button.textContent =
+                index + 1;
+
+            button.title =
+                `${word.word} — ${getStatusText(word.status)}`;
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    currentIndex =
+                        index;
+
+                    showCard();
+
+                }
+            );
+
+            memoryMap.appendChild(
+                button
+            );
+
+        }
+    );
 
 }
 
@@ -398,29 +491,43 @@ function updateStats() {
     let goodWords = 0;
     let easyWords = 0;
 
-    words.forEach(word => {
+    words.forEach(
+        word => {
 
-        if (word.status === "new") {
-            newWords++;
+            if (word.status === "new") {
+                newWords++;
+            }
+
+            if (
+                word.status ===
+                "need-to-learn"
+            ) {
+                againWords++;
+            }
+
+            if (
+                word.status ===
+                "difficult"
+            ) {
+                hardWords++;
+            }
+
+            if (
+                word.status ===
+                "learning"
+            ) {
+                goodWords++;
+            }
+
+            if (
+                word.status ===
+                "mastered"
+            ) {
+                easyWords++;
+            }
+
         }
-
-        if (word.status === "need-to-learn") {
-            againWords++;
-        }
-
-        if (word.status === "difficult") {
-            hardWords++;
-        }
-
-        if (word.status === "learning") {
-            goodWords++;
-        }
-
-        if (word.status === "mastered") {
-            easyWords++;
-        }
-
-    });
+    );
 
     newCount.textContent =
         newWords;
@@ -452,18 +559,22 @@ function getReviewQueue() {
     const now =
         Date.now();
 
-    return words.filter(word => {
+    return words.filter(
+        word => {
 
-        if (!word.nextReview) {
-            return false;
+            if (!word.nextReview) {
+                return false;
+            }
+
+            return (
+                new Date(
+                    word.nextReview
+                ).getTime()
+                <= now
+            );
+
         }
-
-        return (
-            new Date(word.nextReview).getTime()
-            <= now
-        );
-
-    });
+    );
 
 }
 
@@ -475,19 +586,21 @@ function getReviewQueue() {
 function getStudyDay() {
 
     const start =
-        new Date(studyPlan.startDate);
+        new Date(
+            studyPlan.startDate
+        );
 
     const now =
         new Date();
 
-    const startDate =
+    const startDay =
         new Date(
             start.getFullYear(),
             start.getMonth(),
             start.getDate()
         );
 
-    const currentDate =
+    const today =
         new Date(
             now.getFullYear(),
             now.getMonth(),
@@ -497,11 +610,14 @@ function getStudyDay() {
     const difference =
         Math.floor(
             (
-                currentDate -
-                startDate
+                today - startDay
+            ) /
+            (
+                1000 *
+                60 *
+                60 *
+                24
             )
-            /
-            (1000 * 60 * 60 * 24)
         );
 
     return Math.min(
@@ -525,13 +641,13 @@ function getDailyWords() {
         getStudyDay();
 
     const start =
-        (day - 1)
-        *
+        (
+            day - 1
+        ) *
         studyPlan.wordsPerDay;
 
     const end =
-        start
-        +
+        start +
         studyPlan.wordsPerDay;
 
     return words.slice(
@@ -554,22 +670,135 @@ function updateDailyProgress() {
     const completed =
         todayWords.filter(
             word =>
-                word.reviews > 0
+                word.lastReviewed &&
+                isToday(
+                    word.lastReviewed
+                )
         ).length;
 
+    const target =
+        Math.min(
+            studyPlan.wordsPerDay,
+            todayWords.length
+        );
+
     dailyTarget.textContent =
-        `${completed} / ${todayWords.length} words`;
+        `${completed} / ${target} words`;
 
     const percent =
-        todayWords.length === 0
+        target === 0
             ? 0
             : (
                 completed /
-                todayWords.length
+                target
             ) * 100;
 
     dailyProgressBar.style.width =
-        `${Math.min(percent, 100)}%`;
+        `${Math.min(
+            percent,
+            100
+        )}%`;
+
+    goalProgress.textContent =
+        `${Math.round(
+            Math.min(
+                percent,
+                100
+            )
+        )}%`;
+
+}
+
+
+// ======================================================
+// STREAK
+// ======================================================
+
+function calculateStreak() {
+
+    const reviewedDates =
+        new Set();
+
+    words.forEach(
+        word => {
+
+            if (
+                word.lastReviewed
+            ) {
+
+                reviewedDates.add(
+                    getDateKey(
+                        new Date(
+                            word.lastReviewed
+                        )
+                    )
+                );
+
+            }
+
+        }
+    );
+
+    let streak = 0;
+
+    let current =
+        new Date();
+
+    while (true) {
+
+        const key =
+            getDateKey(current);
+
+        if (
+            reviewedDates.has(
+                key
+            )
+        ) {
+
+            streak++;
+
+            current.setDate(
+                current.getDate() - 1
+            );
+
+        } else {
+
+            break;
+
+        }
+
+    }
+
+    return streak;
+
+}
+
+
+// ======================================================
+// DASHBOARD
+// ======================================================
+
+function updateDashboard() {
+
+    totalWords.textContent =
+        words.length;
+
+    masteredWords.textContent =
+        words.filter(
+            word =>
+                word.status ===
+                "mastered"
+        ).length;
+
+    const streak =
+        calculateStreak();
+
+    streakCount.textContent =
+        `${streak} ${
+            streak === 1
+                ? "day"
+                : "days"
+        }`;
 
 }
 
@@ -580,25 +809,24 @@ function updateDailyProgress() {
 
 function showCard() {
 
-    if (words.length === 0) {
+    if (
+        words.length === 0
+    ) {
 
         wordElement.textContent =
             "No words yet";
 
-        typeElement.textContent =
-            "";
+        deleteWordButton.style.display =
+            "none";
+
+        counterElement.textContent =
+            "0 / 0";
 
         meaningElement.textContent =
             "";
 
         exampleElement.textContent =
             "";
-
-        counterElement.textContent =
-            "0 / 0";
-
-        deleteWordButton.style.display =
-            "flex";
 
         answer.style.display =
             "none";
@@ -609,10 +837,41 @@ function showCard() {
         showAnswerButton.style.display =
             "none";
 
-        ratingContainer.style.display =
+        document.getElementById(
+            "ratingButtons"
+        ).style.display =
             "none";
 
+        renderMemoryMap();
+
+        updateStats();
+
+        updateDailyProgress();
+
+        updateDashboard();
+
         return;
+
+    }
+
+
+    if (
+        currentIndex >=
+        words.length
+    ) {
+
+        currentIndex =
+            words.length - 1;
+
+    }
+
+
+    if (
+        currentIndex < 0
+    ) {
+
+        currentIndex = 0;
+
     }
 
 
@@ -620,35 +879,20 @@ function showCard() {
         words[currentIndex];
 
 
-    // WORD
-
     wordElement.textContent =
         currentWord.word;
-
-
-    // TYPE
 
     typeElement.textContent =
         currentWord.type;
 
-
-    // ANSWER
-
     meaningElement.textContent =
         currentWord.meaning;
-
 
     exampleElement.textContent =
         `"${currentWord.example}"`;
 
-
-    // COUNTER
-
     counterElement.textContent =
         `${currentIndex + 1} / ${words.length}`;
-
-
-    // STUDY DAY
 
     dayElement.textContent =
         `Day ${getStudyDay()}`;
@@ -656,17 +900,12 @@ function showCard() {
 
     // ==================================================
     // DELETE BUTTON
+    // Both default words and custom words can be deleted
     // ==================================================
-    // Always show the trash icon.
-    // Only user-created words can actually be deleted.
 
     deleteWordButton.style.display =
         "flex";
 
-
-    // ==================================================
-    // RESET ACTIVE RECALL
-    // ==================================================
 
     answer.style.display =
         "none";
@@ -677,19 +916,19 @@ function showCard() {
     showAnswerButton.style.display =
         "block";
 
-    ratingContainer.style.display =
+    document.getElementById(
+        "ratingButtons"
+    ).style.display =
         "none";
 
-
-    // ==================================================
-    // UPDATE UI
-    // ==================================================
 
     renderMemoryMap();
 
     updateStats();
 
     updateDailyProgress();
+
+    updateDashboard();
 
 }
 
@@ -711,7 +950,9 @@ showAnswerButton.addEventListener(
         showAnswerButton.style.display =
             "none";
 
-        ratingContainer.style.display =
+        document.getElementById(
+            "ratingButtons"
+        ).style.display =
             "block";
 
     }
@@ -722,126 +963,196 @@ showAnswerButton.addEventListener(
 // RATING
 // ======================================================
 
-ratingButtons.forEach(button => {
+ratingButtons.forEach(
+    button => {
 
-    button.addEventListener(
-        "click",
-        () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-            const rating =
-                button.dataset.rating;
+                if (
+                    words.length === 0
+                ) {
+                    return;
+                }
 
-            const currentWord =
-                words[currentIndex];
+                const rating =
+                    button.dataset.rating;
+
+                const currentWord =
+                    words[currentIndex];
 
 
-            currentWord.rating =
-                rating;
+                currentWord.rating =
+                    rating;
 
-            currentWord.reviews++;
+                currentWord.reviews++;
+
+                currentWord.lastReviewed =
+                    new Date().toISOString();
 
 
-            if (rating === "again") {
+                if (
+                    rating === "again"
+                ) {
 
-                currentWord.status =
-                    "need-to-learn";
+                    currentWord.status =
+                        "need-to-learn";
+
+                }
+
+                if (
+                    rating === "hard"
+                ) {
+
+                    currentWord.status =
+                        "difficult";
+
+                }
+
+                if (
+                    rating === "good"
+                ) {
+
+                    currentWord.status =
+                        "learning";
+
+                }
+
+                if (
+                    rating === "easy"
+                ) {
+
+                    currentWord.status =
+                        "mastered";
+
+                }
+
+
+                currentWord.nextReview =
+                    calculateNextReview(
+                        rating,
+                        currentWord
+                    );
+
+
+                saveWords();
+
+                moveToNextCard();
 
             }
+        );
 
-            else if (rating === "hard") {
-
-                currentWord.status =
-                    "difficult";
-
-            }
-
-            else if (rating === "good") {
-
-                currentWord.status =
-                    "learning";
-
-            }
-
-            else if (rating === "easy") {
-
-                currentWord.status =
-                    "mastered";
-
-            }
-
-
-            currentWord.nextReview =
-                calculateNextReview(
-                    rating
-                );
-
-
-            saveWords();
-
-
-            moveToNextCard();
-
-        }
-    );
-
-});
+    }
+);
 
 
 // ======================================================
 // SRS
 // ======================================================
 
-function calculateNextReview(rating) {
+function calculateNextReview(
+    rating,
+    word
+) {
 
-    let minutes;
+    const reviewCount =
+        word.reviews || 1;
+
+    let days;
 
 
-    if (rating === "again") {
+    if (
+        rating === "again"
+    ) {
 
-        minutes = 10;
-
-    }
-
-    else if (rating === "hard") {
-
-        minutes =
-            24 * 60;
-
-    }
-
-    else if (rating === "good") {
-
-        minutes =
-            3 * 24 * 60;
+        return new Date(
+            Date.now() +
+            10 * 60 * 1000
+        ).toISOString();
 
     }
 
-    else {
 
-        minutes =
-            7 * 24 * 60;
+    if (
+        rating === "hard"
+    ) {
+
+        days =
+            Math.min(
+                2 *
+                Math.pow(
+                    1.3,
+                    reviewCount - 1
+                ),
+                14
+            );
+
+    }
+
+
+    if (
+        rating === "good"
+    ) {
+
+        days =
+            Math.min(
+                3 *
+                Math.pow(
+                    1.8,
+                    reviewCount - 1
+                ),
+                60
+            );
+
+    }
+
+
+    if (
+        rating === "easy"
+    ) {
+
+        days =
+            Math.min(
+                7 *
+                Math.pow(
+                    2.2,
+                    reviewCount - 1
+                ),
+                180
+            );
 
     }
 
 
     return new Date(
-        Date.now()
-        +
-        minutes * 60 * 1000
+        Date.now() +
+        days *
+        24 *
+        60 *
+        60 *
+        1000
     ).toISOString();
 
 }
 
 
 // ======================================================
-// MOVE TO NEXT CARD
+// NEXT CARD
 // ======================================================
 
 function moveToNextCard() {
 
     if (
-        currentIndex
-        <
+        words.length === 0
+    ) {
+        showCard();
+        return;
+    }
+
+
+    if (
+        currentIndex <
         words.length - 1
     ) {
 
@@ -857,7 +1168,6 @@ function moveToNextCard() {
     const reviewQueue =
         getReviewQueue();
 
-
     if (
         reviewQueue.length > 0
     ) {
@@ -868,7 +1178,6 @@ function moveToNextCard() {
                     word.id ===
                     reviewQueue[0].id
             );
-
 
         if (
             reviewIndex !== -1
@@ -886,8 +1195,6 @@ function moveToNextCard() {
     }
 
 
-    showCard();
-
     alert(
         "🎉 Great job! You completed this session."
     );
@@ -896,7 +1203,7 @@ function moveToNextCard() {
 
 
 // ======================================================
-// NEXT BUTTON
+// NEXT / PREVIOUS
 // ======================================================
 
 nextButton.addEventListener(
@@ -904,8 +1211,13 @@ nextButton.addEventListener(
     () => {
 
         if (
-            currentIndex
-            <
+            words.length === 0
+        ) {
+            return;
+        }
+
+        if (
+            currentIndex <
             words.length - 1
         ) {
 
@@ -919,13 +1231,15 @@ nextButton.addEventListener(
 );
 
 
-// ======================================================
-// PREVIOUS BUTTON
-// ======================================================
-
 previousButton.addEventListener(
     "click",
     () => {
+
+        if (
+            words.length === 0
+        ) {
+            return;
+        }
 
         if (
             currentIndex > 0
@@ -936,6 +1250,54 @@ previousButton.addEventListener(
             showCard();
 
         }
+
+    }
+);
+
+
+// ======================================================
+// SHUFFLE
+// ======================================================
+
+shuffleButton.addEventListener(
+    "click",
+    () => {
+
+        if (
+            words.length < 2
+        ) {
+            return;
+        }
+
+
+        for (
+            let i = words.length - 1;
+            i > 0;
+            i--
+        ) {
+
+            const j =
+                Math.floor(
+                    Math.random() *
+                    (i + 1)
+                );
+
+            [
+                words[i],
+                words[j]
+            ] =
+            [
+                words[j],
+                words[i]
+            ];
+
+        }
+
+        currentIndex = 0;
+
+        saveWords();
+
+        showCard();
 
     }
 );
@@ -1022,49 +1384,31 @@ addWordForm.addEventListener(
 
         words.push({
 
-            id:
-                Date.now(),
+            id: Date.now(),
 
-            word:
+            word,
 
-                word,
-
-            meaning:
-
-                meaning,
+            meaning,
 
             example:
-
                 example ||
                 "No example added yet.",
 
-            type:
+            type,
 
-                type,
+            day: null,
 
-            day:
+            status: "new",
 
-                null,
+            rating: null,
 
-            status:
+            reviews: 0,
 
-                "new",
+            nextReview: null,
 
-            rating:
+            createdByUser: true,
 
-                null,
-
-            reviews:
-
-                0,
-
-            nextReview:
-
-                null,
-
-            createdByUser:
-
-                true
+            lastReviewed: null
 
         });
 
@@ -1077,7 +1421,6 @@ addWordForm.addEventListener(
 
 
         closeAddModal();
-
 
         showCard();
 
@@ -1106,23 +1449,6 @@ deleteWordButton.addEventListener(
             words[currentIndex];
 
 
-        // ==================================================
-        // DEFAULT WORDS CANNOT BE DELETED
-        // ==================================================
-
-        if (
-            !currentWord.createdByUser
-        ) {
-
-            alert(
-                "The original VocabFlow words cannot be deleted."
-            );
-
-            return;
-
-        }
-
-
         const confirmed =
             confirm(
                 `Delete "${currentWord.word}"?`
@@ -1130,9 +1456,7 @@ deleteWordButton.addEventListener(
 
 
         if (!confirmed) {
-
             return;
-
         }
 
 
@@ -1146,8 +1470,7 @@ deleteWordButton.addEventListener(
 
 
         if (
-            currentIndex
-            >=
+            currentIndex >=
             words.length
         ) {
 
@@ -1214,10 +1537,6 @@ function closePlanModal() {
 
 }
 
-
-// ======================================================
-// STUDY PLAN PREVIEW
-// ======================================================
 
 function updatePlanPreview() {
 
@@ -1292,9 +1611,7 @@ saveStudyPlanButton.addEventListener(
 
         saveStudyPlan();
 
-
         closePlanModal();
-
 
         showCard();
 
@@ -1303,18 +1620,261 @@ saveStudyPlanButton.addEventListener(
 
 
 // ======================================================
-// KEYBOARD SHORTCUTS
+// QUIZ
+// ======================================================
+
+quizButton.addEventListener(
+    "click",
+    () => {
+
+        if (
+            words.length < 4
+        ) {
+
+            alert(
+                "You need at least 4 words to start the quiz."
+            );
+
+            return;
+
+        }
+
+
+        quizModal.classList.remove(
+            "hidden"
+        );
+
+        startQuiz();
+
+    }
+);
+
+
+closeQuiz.addEventListener(
+    "click",
+    () => {
+
+        quizModal.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+
+document
+    .querySelector(
+        "#quizModal .modal-overlay"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            quizModal.classList.add(
+                "hidden"
+            );
+
+        }
+    );
+
+
+function startQuiz() {
+
+    quizAnswered = false;
+
+    quizResult.textContent = "";
+
+    nextQuiz.style.display =
+        "none";
+
+
+    quizIndex =
+        Math.floor(
+            Math.random() *
+            words.length
+        );
+
+
+    const question =
+        words[quizIndex];
+
+
+    quizWord.textContent =
+        question.word;
+
+
+    const options =
+        createQuizOptions(
+            question
+        );
+
+
+    quizOptions.innerHTML = "";
+
+
+    options.forEach(
+        option => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.className =
+                "quiz-option";
+
+            button.textContent =
+                option.meaning;
+
+            button.addEventListener(
+                "click",
+                () =>
+                    answerQuiz(
+                        button,
+                        option,
+                        question
+                    )
+            );
+
+            quizOptions.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+function createQuizOptions(
+    question
+) {
+
+    const others =
+        words.filter(
+            word =>
+                word.id !==
+                question.id
+        );
+
+
+    const shuffled =
+        [...others]
+            .sort(
+                () =>
+                    Math.random() - 0.5
+            )
+            .slice(0, 3);
+
+
+    const options = [
+        question,
+        ...shuffled
+    ];
+
+
+    return options.sort(
+        () =>
+            Math.random() - 0.5
+    );
+
+}
+
+
+function answerQuiz(
+    button,
+    selected,
+    question
+) {
+
+    if (
+        quizAnswered
+    ) {
+
+        return;
+
+    }
+
+
+    quizAnswered = true;
+
+
+    const allOptions =
+        document.querySelectorAll(
+            ".quiz-option"
+        );
+
+
+    allOptions.forEach(
+        optionButton => {
+
+            if (
+                optionButton.textContent ===
+                question.meaning
+            ) {
+
+                optionButton.classList.add(
+                    "correct"
+                );
+
+            }
+
+        }
+    );
+
+
+    if (
+        selected.id ===
+        question.id
+    ) {
+
+        button.classList.add(
+            "correct"
+        );
+
+        quizResult.textContent =
+            "✓ Correct!";
+
+        quizResult.style.color =
+            "#429060";
+
+    } else {
+
+        button.classList.add(
+            "wrong"
+        );
+
+        quizResult.textContent =
+            `✗ The correct answer is: ${question.meaning}`;
+
+        quizResult.style.color =
+            "#c75252";
+
+    }
+
+
+    nextQuiz.style.display =
+        "block";
+
+}
+
+
+nextQuiz.addEventListener(
+    "click",
+    startQuiz
+);
+
+
+// ======================================================
+// KEYBOARD
 // ======================================================
 
 document.addEventListener(
     "keydown",
     event => {
 
-        // SPACE = SHOW ANSWER
-
         if (
-            event.code === "Space"
-            &&
+            event.code === "Space" &&
             answer.style.display !== "block"
         ) {
 
@@ -1325,8 +1885,6 @@ document.addEventListener(
         }
 
 
-        // RIGHT ARROW = NEXT
-
         if (
             event.key === "ArrowRight"
         ) {
@@ -1335,8 +1893,6 @@ document.addEventListener(
 
         }
 
-
-        // LEFT ARROW = PREVIOUS
 
         if (
             event.key === "ArrowLeft"
