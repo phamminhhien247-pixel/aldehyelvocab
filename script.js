@@ -1,12 +1,12 @@
-// ==========================================
+// ======================================================
 // VOCABFLOW
-// Vocabulary + Active Recall + SRS
-// ==========================================
+// Vocabulary + Active Recall + SRS + Study Plan
+// ======================================================
 
 
-// ==========================================
+// ======================================================
 // DEFAULT WORDS
-// ==========================================
+// ======================================================
 
 const defaultWords = [
     ["give up", "to stop trying", "She refused to give up despite several setbacks.", "Phrasal Verb", 1],
@@ -72,58 +72,76 @@ const defaultWords = [
 ];
 
 
-// ==========================================
+// ======================================================
 // LOAD WORDS
-// ==========================================
+// ======================================================
 
-let words =
-    JSON.parse(
-        localStorage.getItem("vocabFlowWords")
-    );
+let words = JSON.parse(
+    localStorage.getItem("vocabFlowWords")
+);
 
 if (!words) {
 
-    words = defaultWords.map(
-        function(item, index) {
+    words = defaultWords.map((item, index) => ({
+        id: index + 1,
+        word: item[0],
+        meaning: item[1],
+        example: item[2],
+        type: item[3],
+        day: item[4],
 
-            return {
-                id: index + 1,
-                word: item[0],
-                meaning: item[1],
-                example: item[2],
-                type: item[3],
-                day: item[4],
+        status: "new",
+        rating: null,
+        reviews: 0,
+        nextReview: null,
 
-                status: "new",
-
-                rating: null,
-
-                reviews: 0,
-
-                nextReview: null,
-
-                createdByUser: false
-            };
-
-        }
-    );
+        createdByUser: false
+    }));
 
     saveWords();
 }
 
 
-// ==========================================
+// ======================================================
+// STUDY PLAN
+// ======================================================
+
+let studyPlan = JSON.parse(
+    localStorage.getItem("vocabFlowStudyPlan")
+);
+
+if (!studyPlan) {
+
+    studyPlan = {
+        wordsPerDay: 10,
+        days: 15,
+        startDate: new Date().toISOString()
+    };
+
+    saveStudyPlan();
+}
+
+
+function saveStudyPlan() {
+
+    localStorage.setItem(
+        "vocabFlowStudyPlan",
+        JSON.stringify(studyPlan)
+    );
+
+}
+
+
+// ======================================================
 // STATE
-// ==========================================
+// ======================================================
 
 let currentIndex = 0;
 
-let sessionOrder = [];
 
-
-// ==========================================
+// ======================================================
 // ELEMENTS
-// ==========================================
+// ======================================================
 
 const wordElement =
     document.getElementById("word");
@@ -143,17 +161,20 @@ const dayElement =
 const counterElement =
     document.getElementById("counter");
 
-const progressBar =
-    document.getElementById("progressBar");
-
 const showAnswerButton =
     document.getElementById("showAnswer");
+
+const deleteWordButton =
+    document.getElementById("deleteWordButton");
 
 const answer =
     document.getElementById("answer");
 
 const recallPrompt =
     document.getElementById("recallPrompt");
+
+const ratingContainer =
+    document.getElementById("ratingButtons");
 
 const ratingButtons =
     document.querySelectorAll(".rating");
@@ -170,11 +191,16 @@ const memoryMap =
 const queueStatus =
     document.getElementById("queueStatus");
 
-const sessionStatus =
-    document.getElementById("sessionStatus");
+const dailyTarget =
+    document.getElementById("dailyTarget");
+
+const dailyProgressBar =
+    document.getElementById("dailyProgressBar");
 
 
-// Stats
+// ======================================================
+// STATS
+// ======================================================
 
 const newCount =
     document.getElementById("newCount");
@@ -192,7 +218,9 @@ const easyCount =
     document.getElementById("easyCount");
 
 
-// Modal
+// ======================================================
+// ADD WORD
+// ======================================================
 
 const addWordButton =
     document.getElementById("addWordButton");
@@ -205,9 +233,6 @@ const closeModal =
 
 const addWordForm =
     document.getElementById("addWordForm");
-
-
-// Inputs
 
 const newWord =
     document.getElementById("newWord");
@@ -222,9 +247,35 @@ const newType =
     document.getElementById("newType");
 
 
-// ==========================================
+// ======================================================
+// STUDY PLAN
+// ======================================================
+
+const studyPlanButton =
+    document.getElementById("studyPlanButton");
+
+const studyPlanModal =
+    document.getElementById("studyPlanModal");
+
+const closeStudyPlan =
+    document.getElementById("closeStudyPlan");
+
+const wordsPerDay =
+    document.getElementById("wordsPerDay");
+
+const studyDays =
+    document.getElementById("studyDays");
+
+const planTotal =
+    document.getElementById("planTotal");
+
+const saveStudyPlanButton =
+    document.getElementById("saveStudyPlan");
+
+
+// ======================================================
 // SAVE WORDS
-// ==========================================
+// ======================================================
 
 function saveWords() {
 
@@ -236,9 +287,9 @@ function saveWords() {
 }
 
 
-// ==========================================
+// ======================================================
 // STATUS
-// ==========================================
+// ======================================================
 
 function getStatusClass(word) {
 
@@ -259,84 +310,8 @@ function getStatusClass(word) {
     }
 
     return "";
-
 }
 
-
-// ==========================================
-// MEMORY MAP
-// ==========================================
-
-function renderMemoryMap() {
-
-    memoryMap.innerHTML = "";
-
-
-    words.forEach(
-        function(word, index) {
-
-            const button =
-                document.createElement("button");
-
-            button.className =
-                "memory-dot";
-
-
-            const statusClass =
-                getStatusClass(word);
-
-
-            if (statusClass) {
-
-                button.classList.add(
-                    statusClass
-                );
-
-            }
-
-
-            if (index === currentIndex) {
-
-                button.classList.add(
-                    "current"
-                );
-
-            }
-
-
-            button.textContent =
-                index + 1;
-
-
-            button.title =
-                `${word.word} — ${getStatusText(word.status)}`;
-
-
-            button.addEventListener(
-                "click",
-                function() {
-
-                    currentIndex = index;
-
-                    showCard();
-
-                }
-            );
-
-
-            memoryMap.appendChild(
-                button
-            );
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// STATUS TEXT
-// ==========================================
 
 function getStatusText(status) {
 
@@ -357,13 +332,63 @@ function getStatusText(status) {
     }
 
     return "New";
+}
+
+
+// ======================================================
+// MEMORY MAP
+// ======================================================
+
+function renderMemoryMap() {
+
+    memoryMap.innerHTML = "";
+
+    words.forEach((word, index) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "memory-dot";
+
+        const statusClass =
+            getStatusClass(word);
+
+        if (statusClass) {
+            button.classList.add(statusClass);
+        }
+
+        if (index === currentIndex) {
+            button.classList.add("current");
+        }
+
+        button.textContent =
+            index + 1;
+
+        button.title =
+            `${word.word} — ${getStatusText(word.status)}`;
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                currentIndex = index;
+
+                showCard();
+
+            }
+        );
+
+        memoryMap.appendChild(button);
+
+    });
 
 }
 
 
-// ==========================================
-// STATISTICS
-// ==========================================
+// ======================================================
+// STATS
+// ======================================================
 
 function updateStats() {
 
@@ -373,41 +398,29 @@ function updateStats() {
     let goodWords = 0;
     let easyWords = 0;
 
+    words.forEach(word => {
 
-    words.forEach(
-        function(word) {
-
-            if (word.status === "new") {
-                newWords++;
-            }
-
-            else if (
-                word.status === "need-to-learn"
-            ) {
-                againWords++;
-            }
-
-            else if (
-                word.status === "difficult"
-            ) {
-                hardWords++;
-            }
-
-            else if (
-                word.status === "learning"
-            ) {
-                goodWords++;
-            }
-
-            else if (
-                word.status === "mastered"
-            ) {
-                easyWords++;
-            }
-
+        if (word.status === "new") {
+            newWords++;
         }
-    );
 
+        if (word.status === "need-to-learn") {
+            againWords++;
+        }
+
+        if (word.status === "difficult") {
+            hardWords++;
+        }
+
+        if (word.status === "learning") {
+            goodWords++;
+        }
+
+        if (word.status === "mastered") {
+            easyWords++;
+        }
+
+    });
 
     newCount.textContent =
         newWords;
@@ -424,49 +437,146 @@ function updateStats() {
     easyCount.textContent =
         easyWords;
 
-
-    const reviewCount =
-        getReviewQueue().length;
-
-
     queueStatus.textContent =
-        `${reviewCount} words to review`;
+        `${getReviewQueue().length} words to review`;
 
 }
 
 
-// ==========================================
+// ======================================================
 // REVIEW QUEUE
-// ==========================================
+// ======================================================
 
 function getReviewQueue() {
 
     const now =
         Date.now();
 
+    return words.filter(word => {
 
-    return words.filter(
-        function(word) {
-
-            if (!word.nextReview) {
-                return false;
-            }
-
-            return (
-                new Date(word.nextReview)
-                .getTime()
-                <= now
-            );
-
+        if (!word.nextReview) {
+            return false;
         }
+
+        return (
+            new Date(word.nextReview).getTime()
+            <= now
+        );
+
+    });
+
+}
+
+
+// ======================================================
+// STUDY DAY
+// ======================================================
+
+function getStudyDay() {
+
+    const start =
+        new Date(studyPlan.startDate);
+
+    const now =
+        new Date();
+
+    const startDate =
+        new Date(
+            start.getFullYear(),
+            start.getMonth(),
+            start.getDate()
+        );
+
+    const currentDate =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+        );
+
+    const difference =
+        Math.floor(
+            (
+                currentDate -
+                startDate
+            )
+            /
+            (1000 * 60 * 60 * 24)
+        );
+
+    return Math.min(
+        Math.max(
+            difference + 1,
+            1
+        ),
+        studyPlan.days
     );
 
 }
 
 
-// ==========================================
+// ======================================================
+// DAILY WORDS
+// ======================================================
+
+function getDailyWords() {
+
+    const day =
+        getStudyDay();
+
+    const start =
+        (day - 1)
+        *
+        studyPlan.wordsPerDay;
+
+    const end =
+        start
+        +
+        studyPlan.wordsPerDay;
+
+    return words.slice(
+        start,
+        end
+    );
+
+}
+
+
+// ======================================================
+// DAILY PROGRESS
+// ======================================================
+
+function updateDailyProgress() {
+
+    const todayWords =
+        getDailyWords();
+
+    const completed =
+        todayWords.filter(
+            word =>
+                word.reviews > 0
+        ).length;
+
+    dailyTarget.textContent =
+        `${completed} / ${todayWords.length} words`;
+
+    const percent =
+        todayWords.length === 0
+            ? 0
+            : (
+                completed /
+                todayWords.length
+            ) * 100;
+
+    dailyProgressBar.style.width =
+        `${Math.min(percent, 100)}%`;
+
+}
+
+
+// ======================================================
 // SHOW CARD
-// ==========================================
+// ======================================================
 
 function showCard() {
 
@@ -475,8 +585,34 @@ function showCard() {
         wordElement.textContent =
             "No words yet";
 
-        return;
+        typeElement.textContent =
+            "";
 
+        meaningElement.textContent =
+            "";
+
+        exampleElement.textContent =
+            "";
+
+        counterElement.textContent =
+            "0 / 0";
+
+        deleteWordButton.style.display =
+            "flex";
+
+        answer.style.display =
+            "none";
+
+        recallPrompt.style.display =
+            "none";
+
+        showAnswerButton.style.display =
+            "none";
+
+        ratingContainer.style.display =
+            "none";
+
+        return;
     }
 
 
@@ -484,13 +620,19 @@ function showCard() {
         words[currentIndex];
 
 
+    // WORD
+
     wordElement.textContent =
         currentWord.word;
 
 
+    // TYPE
+
     typeElement.textContent =
         currentWord.type;
 
+
+    // ANSWER
 
     meaningElement.textContent =
         currentWord.meaning;
@@ -500,199 +642,167 @@ function showCard() {
         `"${currentWord.example}"`;
 
 
-    dayElement.textContent =
-        currentWord.day
-            ? `Day ${currentWord.day}`
-            : "Custom";
-
+    // COUNTER
 
     counterElement.textContent =
         `${currentIndex + 1} / ${words.length}`;
 
 
-    progressBar.style.width =
-        `${((currentIndex + 1) / words.length) * 100}%`;
+    // STUDY DAY
+
+    dayElement.textContent =
+        `Day ${getStudyDay()}`;
 
 
-    // Hide answer
+    // ==================================================
+    // DELETE BUTTON
+    // ==================================================
+    // Always show the trash icon.
+    // Only user-created words can actually be deleted.
+
+    deleteWordButton.style.display =
+        "flex";
+
+
+    // ==================================================
+    // RESET ACTIVE RECALL
+    // ==================================================
 
     answer.style.display =
         "none";
 
-
     recallPrompt.style.display =
         "flex";
-
 
     showAnswerButton.style.display =
         "block";
 
-
-    showAnswerButton.textContent =
-        "Show Answer";
-
-
-    // Hide ratings
-
-    document.getElementById(
-        "ratingButtons"
-    ).style.display =
+    ratingContainer.style.display =
         "none";
 
 
-    sessionStatus.textContent =
-        getStatusText(
-            currentWord.status
-        );
-
+    // ==================================================
+    // UPDATE UI
+    // ==================================================
 
     renderMemoryMap();
 
     updateStats();
 
+    updateDailyProgress();
+
 }
 
 
-// ==========================================
+// ======================================================
 // SHOW ANSWER
-// ==========================================
+// ======================================================
 
 showAnswerButton.addEventListener(
     "click",
-    function() {
+    () => {
 
         answer.style.display =
             "block";
 
-
         recallPrompt.style.display =
             "none";
-
 
         showAnswerButton.style.display =
             "none";
 
-
-        document.getElementById(
-            "ratingButtons"
-        ).style.display =
+        ratingContainer.style.display =
             "block";
 
     }
 );
 
 
-// ==========================================
+// ======================================================
 // RATING
-// ==========================================
+// ======================================================
 
-ratingButtons.forEach(
-    function(button) {
+ratingButtons.forEach(button => {
 
-        button.addEventListener(
-            "click",
-            function() {
+    button.addEventListener(
+        "click",
+        () => {
 
-                const rating =
-                    button.dataset.rating;
+            const rating =
+                button.dataset.rating;
 
-
-                const currentWord =
-                    words[currentIndex];
+            const currentWord =
+                words[currentIndex];
 
 
-                currentWord.rating =
-                    rating;
+            currentWord.rating =
+                rating;
+
+            currentWord.reviews++;
 
 
-                currentWord.reviews++;
+            if (rating === "again") {
 
-
-                currentWord.nextReview =
-                    calculateNextReview(
-                        rating
-                    );
-
-
-                // Set memory status
-
-                if (rating === "again") {
-
-                    currentWord.status =
-                        "need-to-learn";
-
-                }
-
-                else if (rating === "hard") {
-
-                    currentWord.status =
-                        "difficult";
-
-                }
-
-                else if (rating === "good") {
-
-                    currentWord.status =
-                        "learning";
-
-                }
-
-                else if (rating === "easy") {
-
-                    currentWord.status =
-                        "mastered";
-
-                }
-
-
-                saveWords();
-
-
-                /*
-                    IMPORTANT:
-
-                    Again / Hard do NOT disappear.
-
-                    We move forward first.
-                    They remain in the Memory Map
-                    and enter the Review Queue.
-                */
-
-
-                moveToNextCard();
+                currentWord.status =
+                    "need-to-learn";
 
             }
-        );
 
-    }
-);
+            else if (rating === "hard") {
+
+                currentWord.status =
+                    "difficult";
+
+            }
+
+            else if (rating === "good") {
+
+                currentWord.status =
+                    "learning";
+
+            }
+
+            else if (rating === "easy") {
+
+                currentWord.status =
+                    "mastered";
+
+            }
 
 
-// ==========================================
-// SRS TIMING
-// ==========================================
+            currentWord.nextReview =
+                calculateNextReview(
+                    rating
+                );
+
+
+            saveWords();
+
+
+            moveToNextCard();
+
+        }
+    );
+
+});
+
+
+// ======================================================
+// SRS
+// ======================================================
 
 function calculateNextReview(rating) {
-
-    const now =
-        Date.now();
-
 
     let minutes;
 
 
     if (rating === "again") {
 
-        // 10 minutes
-
-        minutes =
-            10;
+        minutes = 10;
 
     }
 
     else if (rating === "hard") {
-
-        // 1 day
 
         minutes =
             24 * 60;
@@ -701,16 +811,12 @@ function calculateNextReview(rating) {
 
     else if (rating === "good") {
 
-        // 3 days
-
         minutes =
             3 * 24 * 60;
 
     }
 
     else {
-
-        // 7 days
 
         minutes =
             7 * 24 * 60;
@@ -719,15 +825,17 @@ function calculateNextReview(rating) {
 
 
     return new Date(
-        now + minutes * 60 * 1000
+        Date.now()
+        +
+        minutes * 60 * 1000
     ).toISOString();
 
 }
 
 
-// ==========================================
-// NEXT CARD
-// ==========================================
+// ======================================================
+// MOVE TO NEXT CARD
+// ======================================================
 
 function moveToNextCard() {
 
@@ -746,42 +854,30 @@ function moveToNextCard() {
     }
 
 
-    // We reached the end.
-
     const reviewQueue =
         getReviewQueue();
 
 
-    if (reviewQueue.length > 0) {
-
-        /*
-            Find the first word that
-            needs review.
-        */
+    if (
+        reviewQueue.length > 0
+    ) {
 
         const reviewIndex =
             words.findIndex(
-                function(word) {
-
-                    return (
-                        word.id
-                        ===
-                        reviewQueue[0].id
-                    );
-
-                }
+                word =>
+                    word.id ===
+                    reviewQueue[0].id
             );
 
 
-        if (reviewIndex !== -1) {
+        if (
+            reviewIndex !== -1
+        ) {
 
             currentIndex =
                 reviewIndex;
 
             showCard();
-
-            sessionStatus.textContent =
-                "Review time";
 
             return;
 
@@ -790,6 +886,8 @@ function moveToNextCard() {
     }
 
 
+    showCard();
+
     alert(
         "🎉 Great job! You completed this session."
     );
@@ -797,13 +895,13 @@ function moveToNextCard() {
 }
 
 
-// ==========================================
+// ======================================================
 // NEXT BUTTON
-// ==========================================
+// ======================================================
 
 nextButton.addEventListener(
     "click",
-    function() {
+    () => {
 
         if (
             currentIndex
@@ -821,18 +919,16 @@ nextButton.addEventListener(
 );
 
 
-// ==========================================
+// ======================================================
 // PREVIOUS BUTTON
-// ==========================================
+// ======================================================
 
 previousButton.addEventListener(
     "click",
-    function() {
+    () => {
 
         if (
-            currentIndex
-            >
-            0
+            currentIndex > 0
         ) {
 
             currentIndex--;
@@ -845,13 +941,13 @@ previousButton.addEventListener(
 );
 
 
-// ==========================================
+// ======================================================
 // ADD WORD MODAL
-// ==========================================
+// ======================================================
 
 addWordButton.addEventListener(
     "click",
-    function() {
+    () => {
 
         addWordModal.classList.remove(
             "hidden"
@@ -865,27 +961,21 @@ addWordButton.addEventListener(
 
 closeModal.addEventListener(
     "click",
-    function() {
-
-        closeAddWordModal();
-
-    }
+    closeAddModal
 );
 
 
 document
-    .querySelector(".modal-overlay")
+    .querySelector(
+        "#addWordModal .modal-overlay"
+    )
     .addEventListener(
         "click",
-        function() {
-
-            closeAddWordModal();
-
-        }
+        closeAddModal
     );
 
 
-function closeAddWordModal() {
+function closeAddModal() {
 
     addWordModal.classList.add(
         "hidden"
@@ -896,13 +986,13 @@ function closeAddWordModal() {
 }
 
 
-// ==========================================
-// ADD NEW WORD
-// ==========================================
+// ======================================================
+// ADD WORD
+// ======================================================
 
 addWordForm.addEventListener(
     "submit",
-    function(event) {
+    event => {
 
         event.preventDefault();
 
@@ -920,93 +1010,307 @@ addWordForm.addEventListener(
             newType.value;
 
 
-        if (!word || !meaning) {
+        if (
+            !word ||
+            !meaning
+        ) {
 
             return;
 
         }
 
 
-        const newVocabulary = {
+        words.push({
 
             id:
                 Date.now(),
 
             word:
+
                 word,
 
             meaning:
+
                 meaning,
 
             example:
+
                 example ||
                 "No example added yet.",
 
             type:
+
                 type,
 
             day:
+
                 null,
 
             status:
+
                 "new",
 
             rating:
+
                 null,
 
             reviews:
+
                 0,
 
             nextReview:
+
                 null,
 
             createdByUser:
+
                 true
 
-        };
+        });
 
 
-        words.push(
-            newVocabulary
+        saveWords();
+
+
+        currentIndex =
+            words.length - 1;
+
+
+        closeAddModal();
+
+
+        showCard();
+
+    }
+);
+
+
+// ======================================================
+// DELETE WORD
+// ======================================================
+
+deleteWordButton.addEventListener(
+    "click",
+    () => {
+
+        if (
+            words.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        const currentWord =
+            words[currentIndex];
+
+
+        // ==================================================
+        // DEFAULT WORDS CANNOT BE DELETED
+        // ==================================================
+
+        if (
+            !currentWord.createdByUser
+        ) {
+
+            alert(
+                "The original VocabFlow words cannot be deleted."
+            );
+
+            return;
+
+        }
+
+
+        const confirmed =
+            confirm(
+                `Delete "${currentWord.word}"?`
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        words.splice(
+            currentIndex,
+            1
         );
 
 
         saveWords();
 
 
-        /*
-            Go directly to the
-            newly added word.
-        */
+        if (
+            currentIndex
+            >=
+            words.length
+        ) {
 
-        currentIndex =
-            words.length - 1;
+            currentIndex =
+                Math.max(
+                    words.length - 1,
+                    0
+                );
 
+        }
 
-        closeAddWordModal();
 
         showCard();
 
+    }
+);
 
-        alert(
-            `✓ "${word}" has been added!`
+
+// ======================================================
+// STUDY PLAN MODAL
+// ======================================================
+
+studyPlanButton.addEventListener(
+    "click",
+    () => {
+
+        wordsPerDay.value =
+            studyPlan.wordsPerDay;
+
+        studyDays.value =
+            studyPlan.days;
+
+        updatePlanPreview();
+
+        studyPlanModal.classList.remove(
+            "hidden"
         );
 
     }
 );
 
 
-// ==========================================
+closeStudyPlan.addEventListener(
+    "click",
+    closePlanModal
+);
+
+
+document
+    .querySelector(
+        "#studyPlanModal .modal-overlay"
+    )
+    .addEventListener(
+        "click",
+        closePlanModal
+    );
+
+
+function closePlanModal() {
+
+    studyPlanModal.classList.add(
+        "hidden"
+    );
+
+}
+
+
+// ======================================================
+// STUDY PLAN PREVIEW
+// ======================================================
+
+function updatePlanPreview() {
+
+    const daily =
+        Number(
+            wordsPerDay.value
+        ) || 0;
+
+    const days =
+        Number(
+            studyDays.value
+        ) || 0;
+
+
+    planTotal.textContent =
+        `${daily * days} words`;
+
+}
+
+
+wordsPerDay.addEventListener(
+    "input",
+    updatePlanPreview
+);
+
+
+studyDays.addEventListener(
+    "input",
+    updatePlanPreview
+);
+
+
+// ======================================================
+// SAVE STUDY PLAN
+// ======================================================
+
+saveStudyPlanButton.addEventListener(
+    "click",
+    () => {
+
+        const daily =
+            Math.max(
+                1,
+                Number(
+                    wordsPerDay.value
+                )
+            );
+
+
+        const days =
+            Math.max(
+                1,
+                Number(
+                    studyDays.value
+                )
+            );
+
+
+        studyPlan = {
+
+            wordsPerDay:
+                daily,
+
+            days:
+                days,
+
+            startDate:
+                new Date().toISOString()
+
+        };
+
+
+        saveStudyPlan();
+
+
+        closePlanModal();
+
+
+        showCard();
+
+    }
+);
+
+
+// ======================================================
 // KEYBOARD SHORTCUTS
-// ==========================================
+// ======================================================
 
 document.addEventListener(
     "keydown",
-    function(event) {
+    event => {
 
-        /*
-            Space = Show Answer
-        */
+        // SPACE = SHOW ANSWER
 
         if (
             event.code === "Space"
@@ -1021,9 +1325,7 @@ document.addEventListener(
         }
 
 
-        /*
-            Arrow Right = Next
-        */
+        // RIGHT ARROW = NEXT
 
         if (
             event.key === "ArrowRight"
@@ -1034,9 +1336,7 @@ document.addEventListener(
         }
 
 
-        /*
-            Arrow Left = Previous
-        */
+        // LEFT ARROW = PREVIOUS
 
         if (
             event.key === "ArrowLeft"
@@ -1050,8 +1350,8 @@ document.addEventListener(
 );
 
 
-// ==========================================
+// ======================================================
 // INITIALISE
-// ==========================================
+// ======================================================
 
 showCard();

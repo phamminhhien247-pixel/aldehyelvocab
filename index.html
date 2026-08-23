@@ -14,137 +14,146 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
+
 <body>
 
-    <div class="app">
+<div class="app">
 
-        <!-- HEADER -->
-        <header class="top-bar">
+    <!-- ================= HEADER ================= -->
 
-            <div class="brand">
+    <header class="top-bar">
 
-                <div class="brand-icon">
-                    V
-                </div>
+        <div class="brand">
 
-                <div>
-                    <h1>VocabFlow</h1>
-                    <p>Learn smarter. Remember longer.</p>
-                </div>
-
+            <div class="brand-icon">
+                V
             </div>
 
-            <div class="header-actions">
-
-                <button
-                    id="addWordButton"
-                    class="add-word-button"
-                >
-                    ＋ Add Word
-                </button>
-
-                <div class="progress-info">
-                    <span id="counter">1 / 50</span>
-                </div>
-
+            <div>
+                <h1>VocabFlow</h1>
+                <p>Learn smarter. Remember longer.</p>
             </div>
 
-        </header>
+        </div>
 
 
-        <!-- MEMORY MAP -->
+        <div class="header-actions">
 
-        <section class="memory-section">
+            <button
+                id="addWordButton"
+                class="header-button"
+                type="button"
+            >
+                ＋ Add Word
+            </button>
 
-            <div class="section-heading">
 
-                <div>
-                    <h2>Memory Map</h2>
-                    <p>Your vocabulary memory at a glance</p>
-                </div>
-
-                <div class="memory-stats">
-
-                    <span class="stat new">
-                        <b id="newCount">0</b> New
-                    </span>
-
-                    <span class="stat again">
-                        <b id="againCount">0</b> Need to learn
-                    </span>
-
-                    <span class="stat hard">
-                        <b id="hardCount">0</b> Difficult
-                    </span>
-
-                    <span class="stat good">
-                        <b id="goodCount">0</b> Learning
-                    </span>
-
-                    <span class="stat easy">
-                        <b id="easyCount">0</b> Mastered
-                    </span>
-
-                </div>
-
-            </div>
+            <button
+                id="studyPlanButton"
+                class="header-button plan-button"
+                type="button"
+            >
+                ⚙ Study Plan
+            </button>
 
 
             <div
-                id="memoryMap"
-                class="memory-map"
-            ></div>
+                id="counter"
+                class="counter"
+            >
+                1 / 50
+            </div>
 
-        </section>
+        </div>
+
+    </header>
 
 
-        <!-- PROGRESS -->
 
-        <section class="progress-section">
+    <!-- ================= MEMORY MAP ================= -->
 
-            <div class="progress-label">
+    <section class="memory-section">
 
-                <span id="day">
-                    Day 1
+        <div class="memory-heading">
+
+            <div>
+                <h2>Memory Map</h2>
+                <p>Your vocabulary memory at a glance</p>
+            </div>
+
+
+            <div class="memory-stats">
+
+                <span class="stat new">
+                    <b id="newCount">0</b> New
                 </span>
 
-                <span id="sessionStatus">
-                    Ready to learn
+                <span class="stat again">
+                    <b id="againCount">0</b> Need to learn
+                </span>
+
+                <span class="stat hard">
+                    <b id="hardCount">0</b> Difficult
+                </span>
+
+                <span class="stat good">
+                    <b id="goodCount">0</b> Learning
+                </span>
+
+                <span class="stat easy">
+                    <b id="easyCount">0</b> Mastered
                 </span>
 
             </div>
 
-            <div class="progress-track">
+        </div>
 
-                <div
-                    id="progressBar"
-                    class="progress-fill"
-                ></div>
 
+        <div
+            id="memoryMap"
+            class="memory-map"
+        ></div>
+
+    </section>
+
+
+
+    <!-- ================= FLASHCARD ================= -->
+
+    <main class="flashcard">
+
+        <!-- DELETE -->
+        <button
+            id="deleteWordButton"
+            class="delete-word-button"
+            title="Delete custom word"
+            type="button"
+        >
+            🗑️
+        </button>
+
+
+        <div class="card-content">
+
+
+            <!-- TOP LABEL -->
+
+            <div class="active-label">
+                ACTIVE RECALL
             </div>
 
-        </section>
 
+            <!-- TYPE -->
 
-        <!-- FLASHCARD -->
-
-        <main class="flashcard">
-
-            <div class="card-top">
-
-                <span
-                    id="type"
-                    class="word-type"
-                >
-                    Phrasal Verb
-                </span>
-
-                <span class="card-label">
-                    ACTIVE RECALL
-                </span>
-
+            <div
+                id="type"
+                class="word-type"
+            >
+                Phrasal Verb
             </div>
 
+
+            <!-- WORD -->
 
             <div class="word-area">
 
@@ -155,6 +164,41 @@
                 <h2 id="word">
                     give up
                 </h2>
+
+            </div>
+
+
+            <!-- DAY / DAILY TARGET -->
+
+            <div class="study-info">
+
+                <div class="study-day">
+                    <span id="day">
+                        Day 1
+                    </span>
+
+                    <small>
+                        Study progress
+                    </small>
+                </div>
+
+
+                <div class="daily-progress">
+
+                    <strong id="dailyTarget">
+                        0 / 10 words
+                    </strong>
+
+                    <div class="daily-track">
+
+                        <div
+                            id="dailyProgressBar"
+                            class="daily-fill"
+                        ></div>
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -222,6 +266,7 @@
             <button
                 id="showAnswer"
                 class="show-answer-btn"
+                type="button"
             >
                 Show Answer
             </button>
@@ -244,6 +289,7 @@
                     <button
                         class="rating rating-again"
                         data-rating="again"
+                        type="button"
                     >
                         <span>🔴</span>
                         Again
@@ -254,6 +300,7 @@
                     <button
                         class="rating rating-hard"
                         data-rating="hard"
+                        type="button"
                     >
                         <span>🟠</span>
                         Hard
@@ -264,6 +311,7 @@
                     <button
                         class="rating rating-good"
                         data-rating="good"
+                        type="button"
                     >
                         <span>🟢</span>
                         Good
@@ -274,6 +322,7 @@
                     <button
                         class="rating rating-easy"
                         data-rating="easy"
+                        type="button"
                     >
                         <span>🔵</span>
                         Easy
@@ -292,6 +341,7 @@
                 <button
                     id="previous"
                     class="nav-btn"
+                    type="button"
                 >
                     ← Previous
                 </button>
@@ -311,136 +361,233 @@
                 <button
                     id="next"
                     class="nav-btn"
+                    type="button"
                 >
                     Next →
                 </button>
 
             </div>
 
-        </main>
+        </div>
+
+    </main>
 
 
-        <footer>
-            VocabFlow · Built for smarter vocabulary learning
-        </footer>
+    <footer>
+        VocabFlow · Built for smarter vocabulary learning
+    </footer>
+
+</div>
+
+
+
+<!-- ================= ADD WORD MODAL ================= -->
+
+<div
+    id="addWordModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <div>
+                <h2>Add a new word</h2>
+
+                <p>
+                    Build your own vocabulary bank.
+                </p>
+            </div>
+
+
+            <button
+                id="closeModal"
+                class="close-modal"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="addWordForm">
+
+            <label>
+                Word / Phrase
+
+                <input
+                    id="newWord"
+                    type="text"
+                    placeholder="e.g. broaden one's horizons"
+                    required
+                >
+            </label>
+
+
+            <label>
+                Meaning
+
+                <input
+                    id="newMeaning"
+                    type="text"
+                    placeholder="e.g. mở rộng tầm nhìn"
+                    required
+                >
+            </label>
+
+
+            <label>
+                Example sentence
+
+                <textarea
+                    id="newExample"
+                    placeholder="e.g. Travelling can broaden one's horizons."
+                ></textarea>
+            </label>
+
+
+            <label>
+                Type
+
+                <select id="newType">
+
+                    <option>
+                        Vocabulary
+                    </option>
+
+                    <option>
+                        Phrasal Verb
+                    </option>
+
+                    <option>
+                        Collocation
+                    </option>
+
+                    <option>
+                        Idiom
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <button
+                type="submit"
+                class="create-word-button"
+            >
+                Add Word
+            </button>
+
+        </form>
 
     </div>
 
-
-    <!-- ADD WORD MODAL -->
-
-    <div
-        id="addWordModal"
-        class="modal hidden"
-    >
-
-        <div class="modal-overlay"></div>
+</div>
 
 
-        <div class="modal-box">
 
-            <div class="modal-header">
+<!-- ================= STUDY PLAN MODAL ================= -->
 
-                <div>
+<div
+    id="studyPlanModal"
+    class="modal hidden"
+>
 
-                    <h2>Add a new word</h2>
+    <div class="modal-overlay"></div>
 
-                    <p>
-                        Build your own vocabulary bank.
-                    </p>
 
-                </div>
+    <div class="modal-box">
 
-                <button
-                    id="closeModal"
-                    class="close-modal"
-                >
-                    ×
-                </button>
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    Study Plan
+                </h2>
+
+                <p>
+                    Choose your own learning pace.
+                </p>
 
             </div>
 
 
-            <form id="addWordForm">
+            <button
+                id="closeStudyPlan"
+                class="close-modal"
+                type="button"
+            >
+                ×
+            </button>
 
-                <label>
-                    Word / Phrase
-
-                    <input
-                        id="newWord"
-                        type="text"
-                        placeholder="e.g. broaden one's horizons"
-                        required
-                    >
-
-                </label>
+        </div>
 
 
-                <label>
-                    Meaning
+        <div class="plan-form">
 
-                    <input
-                        id="newMeaning"
-                        type="text"
-                        placeholder="e.g. mở rộng tầm nhìn"
-                        required
-                    >
+            <label>
+                Words per day
 
-                </label>
-
-
-                <label>
-                    Example sentence
-
-                    <textarea
-                        id="newExample"
-                        placeholder="e.g. Travelling can broaden one's horizons."
-                    ></textarea>
-
-                </label>
-
-
-                <label>
-                    Type
-
-                    <select id="newType">
-
-                        <option>
-                            Vocabulary
-                        </option>
-
-                        <option>
-                            Phrasal Verb
-                        </option>
-
-                        <option>
-                            Collocation
-                        </option>
-
-                        <option>
-                            Idiom
-                        </option>
-
-                    </select>
-
-                </label>
-
-
-                <button
-                    type="submit"
-                    class="create-word-button"
+                <input
+                    id="wordsPerDay"
+                    type="number"
+                    min="1"
+                    max="100"
+                    value="10"
                 >
-                    Add Word
-                </button>
+            </label>
 
-            </form>
+
+            <label>
+                Number of days
+
+                <input
+                    id="studyDays"
+                    type="number"
+                    min="1"
+                    max="365"
+                    value="15"
+                >
+            </label>
+
+
+            <div class="plan-summary">
+
+                <span>
+                    Your plan
+                </span>
+
+                <strong id="planTotal">
+                    150 words
+                </strong>
+
+            </div>
+
+
+            <button
+                id="saveStudyPlan"
+                class="create-word-button"
+                type="button"
+            >
+                Save Study Plan
+            </button>
 
         </div>
 
     </div>
 
+</div>
 
-    <script src="script.js"></script>
+
+
+<script src="script.js"></script>
 
 </body>
 
