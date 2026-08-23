@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VocabFlow</title>
+
+    <title>Aldehyel Vocab</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,17 +14,21 @@
 
 <div class="app">
 
-    <!-- HEADER -->
+    <!-- ================= HEADER ================= -->
+
     <header class="top-bar">
 
         <div class="brand">
-            <div class="brand-icon">V</div>
+
+            <div class="brand-icon">A</div>
 
             <div>
-                <h1>VocabFlow</h1>
+                <h1>Aldehyel Vocab</h1>
                 <p>Learn smarter. Remember longer.</p>
             </div>
+
         </div>
+
 
         <div class="header-actions">
 
@@ -41,8 +48,12 @@
                 🔀 Shuffle
             </button>
 
+            <button id="themeButton" class="header-button">
+                🎨 Customize
+            </button>
+
             <div id="counter" class="counter">
-                1 / 50
+                1 / 46
             </div>
 
         </div>
@@ -50,7 +61,8 @@
     </header>
 
 
-    <!-- MEMORY MAP -->
+    <!-- ================= MEMORY MAP ================= -->
+
     <section class="memory-section">
 
         <div class="memory-heading">
@@ -91,16 +103,17 @@
     </section>
 
 
-    <!-- FLASHCARD -->
+    <!-- ================= FLASHCARD ================= -->
+
     <main class="flashcard">
 
         <button
             id="deleteWordButton"
             class="delete-word-button"
-            title="Delete custom word"
-        >
+            title="Delete custom word">
             🗑️
         </button>
+
 
         <div class="card-content">
 
@@ -111,6 +124,7 @@
             <div id="type" class="word-type">
                 Phrasal Verb
             </div>
+
 
             <div class="word-area">
 
@@ -126,6 +140,7 @@
 
 
             <!-- STUDY INFO -->
+
             <div class="study-info">
 
                 <div class="study-day">
@@ -140,6 +155,7 @@
 
                 </div>
 
+
                 <div class="daily-progress">
 
                     <strong id="dailyTarget">
@@ -150,8 +166,8 @@
 
                         <div
                             id="dailyProgressBar"
-                            class="daily-fill"
-                        ></div>
+                            class="daily-fill">
+                        </div>
 
                     </div>
 
@@ -160,7 +176,8 @@
             </div>
 
 
-            <!-- RECALL PROMPT -->
+            <!-- RECALL -->
+
             <div id="recallPrompt" class="recall-prompt">
 
                 <div class="recall-icon">
@@ -184,6 +201,7 @@
 
 
             <!-- ANSWER -->
+
             <div id="answer" class="answer">
 
                 <div class="answer-section">
@@ -195,6 +213,7 @@
                     <p id="meaning"></p>
 
                 </div>
+
 
                 <div class="answer-section">
 
@@ -211,23 +230,25 @@
 
             <button
                 id="showAnswer"
-                class="show-answer-btn"
-            >
+                class="show-answer-btn">
                 Show Answer
             </button>
 
 
-            <!-- MARK AS LEARNED -->
+            <!-- MARK LEARNED -->
+
             <button
                 id="markLearnedButton"
-                class="mark-learned-button"
-            >
+                class="mark-learned-btn">
                 ✓ Mark as Learned
             </button>
 
 
             <!-- RATING -->
-            <div id="ratingButtons" class="rating-buttons">
+
+            <div
+                id="ratingButtons"
+                class="rating-buttons">
 
                 <p class="rating-title">
                     How well did you remember it?
@@ -237,8 +258,7 @@
 
                     <button
                         class="rating rating-again"
-                        data-rating="again"
-                    >
+                        data-rating="again">
                         <span>🔴</span>
                         Again
                         <small>Need to learn</small>
@@ -246,8 +266,7 @@
 
                     <button
                         class="rating rating-hard"
-                        data-rating="hard"
-                    >
+                        data-rating="hard">
                         <span>🟠</span>
                         Hard
                         <small>Difficult</small>
@@ -255,8 +274,7 @@
 
                     <button
                         class="rating rating-good"
-                        data-rating="good"
-                    >
+                        data-rating="good">
                         <span>🟢</span>
                         Good
                         <small>Learning</small>
@@ -264,8 +282,7 @@
 
                     <button
                         class="rating rating-easy"
-                        data-rating="easy"
-                    >
+                        data-rating="easy">
                         <span>🔵</span>
                         Easy
                         <small>Mastered</small>
@@ -277,11 +294,15 @@
 
 
             <!-- NAVIGATION -->
+
             <div class="navigation">
 
-                <button id="previous" class="nav-btn">
+                <button
+                    id="previous"
+                    class="nav-btn">
                     ← Previous
                 </button>
+
 
                 <div class="study-status">
 
@@ -293,7 +314,10 @@
 
                 </div>
 
-                <button id="next" class="nav-btn">
+
+                <button
+                    id="next"
+                    class="nav-btn">
                     Next →
                 </button>
 
@@ -304,7 +328,8 @@
     </main>
 
 
-    <!-- DASHBOARD -->
+    <!-- ================= DASHBOARD ================= -->
+
     <section class="dashboard">
 
         <div class="dashboard-card">
@@ -314,8 +339,15 @@
             </span>
 
             <div>
-                <small>Current streak</small>
-                <strong id="streakCount">0 days</strong>
+
+                <small>
+                    Current streak
+                </small>
+
+                <strong id="streakCount">
+                    0 days
+                </strong>
+
             </div>
 
         </div>
@@ -328,8 +360,15 @@
             </span>
 
             <div>
-                <small>Total words</small>
-                <strong id="totalWords">0</strong>
+
+                <small>
+                    Total words
+                </small>
+
+                <strong id="totalWords">
+                    0
+                </strong>
+
             </div>
 
         </div>
@@ -342,8 +381,15 @@
             </span>
 
             <div>
-                <small>Mastered</small>
-                <strong id="masteredWords">0</strong>
+
+                <small>
+                    Mastered
+                </small>
+
+                <strong id="masteredWords">
+                    0
+                </strong>
+
             </div>
 
         </div>
@@ -356,8 +402,15 @@
             </span>
 
             <div>
-                <small>Today's goal</small>
-                <strong id="goalProgress">0%</strong>
+
+                <small>
+                    Today's goal
+                </small>
+
+                <strong id="goalProgress">
+                    0%
+                </strong>
+
             </div>
 
         </div>
@@ -366,13 +419,14 @@
 
 
     <footer>
-        VocabFlow · Built for smarter vocabulary learning
+        Aldehyel Vocab · Built for smarter vocabulary learning
     </footer>
 
 </div>
 
 
-<!-- ADD WORD MODAL -->
+<!-- ================= ADD WORD MODAL ================= -->
+
 <div id="addWordModal" class="modal hidden">
 
     <div class="modal-overlay"></div>
@@ -393,7 +447,9 @@
 
             </div>
 
-            <button id="closeModal" class="close-modal">
+            <button
+                id="closeModal"
+                class="close-modal">
                 ×
             </button>
 
@@ -409,9 +465,7 @@
                     id="newWord"
                     type="text"
                     placeholder="e.g. broaden one's horizons"
-                    required
-                >
-
+                    required>
             </label>
 
 
@@ -422,9 +476,7 @@
                     id="newMeaning"
                     type="text"
                     placeholder="e.g. mở rộng tầm nhìn"
-                    required
-                >
-
+                    required>
             </label>
 
 
@@ -433,8 +485,8 @@
 
                 <textarea
                     id="newExample"
-                    placeholder="e.g. Travelling can broaden one's horizons."
-                ></textarea>
+                    placeholder="e.g. Travelling can broaden one's horizons.">
+                </textarea>
 
             </label>
 
@@ -456,8 +508,7 @@
 
             <button
                 type="submit"
-                class="create-word-button"
-            >
+                class="create-word-button">
                 Add Word
             </button>
 
@@ -468,7 +519,8 @@
 </div>
 
 
-<!-- STUDY PLAN MODAL -->
+<!-- ================= STUDY PLAN MODAL ================= -->
+
 <div id="studyPlanModal" class="modal hidden">
 
     <div class="modal-overlay"></div>
@@ -489,7 +541,9 @@
 
             </div>
 
-            <button id="closeStudyPlan" class="close-modal">
+            <button
+                id="closeStudyPlan"
+                class="close-modal">
                 ×
             </button>
 
@@ -499,6 +553,7 @@
         <div class="plan-form">
 
             <label>
+
                 Words per day
 
                 <input
@@ -506,13 +561,13 @@
                     type="number"
                     min="1"
                     max="100"
-                    value="10"
-                >
+                    value="10">
 
             </label>
 
 
             <label>
+
                 Number of days
 
                 <input
@@ -520,8 +575,7 @@
                     type="number"
                     min="1"
                     max="365"
-                    value="15"
-                >
+                    value="15">
 
             </label>
 
@@ -541,8 +595,7 @@
 
             <button
                 id="saveStudyPlan"
-                class="create-word-button"
-            >
+                class="create-word-button">
                 Save Study Plan
             </button>
 
@@ -553,7 +606,8 @@
 </div>
 
 
-<!-- QUIZ MODAL -->
+<!-- ================= QUIZ MODAL ================= -->
+
 <div id="quizModal" class="modal hidden">
 
     <div class="modal-overlay"></div>
@@ -574,7 +628,9 @@
 
             </div>
 
-            <button id="closeQuiz" class="close-modal">
+            <button
+                id="closeQuiz"
+                class="close-modal">
                 ×
             </button>
 
@@ -591,18 +647,199 @@
                 give up
             </h2>
 
-            <div id="quizOptions" class="quiz-options"></div>
+            <div
+                id="quizOptions"
+                class="quiz-options">
+            </div>
 
-            <div id="quizResult" class="quiz-result"></div>
+            <div
+                id="quizResult"
+                class="quiz-result">
+            </div>
 
             <button
                 id="nextQuiz"
-                class="create-word-button"
-            >
+                class="create-word-button">
                 Next Question
             </button>
 
         </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= THEME MODAL ================= -->
+
+<div id="themeModal" class="modal hidden">
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-box theme-box">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    🎨 Customize Aldehyel Vocab
+                </h2>
+
+                <p>
+                    Choose your favorite accent color.
+                </p>
+
+            </div>
+
+            <button
+                id="closeTheme"
+                class="close-modal">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="theme-content">
+
+            <p class="theme-title">
+                Preset colors
+            </p>
+
+
+            <div class="theme-presets">
+
+                <button
+                    class="theme-preset"
+                    data-color="#7054d8"
+                    style="--preview:#7054d8;">
+                    <span></span>
+                    Purple
+                </button>
+
+
+                <button
+                    class="theme-preset"
+                    data-color="#4778d8"
+                    style="--preview:#4778d8;">
+                    <span></span>
+                    Blue
+                </button>
+
+
+                <button
+                    class="theme-preset"
+                    data-color="#42a56b"
+                    style="--preview:#42a56b;">
+                    <span></span>
+                    Green
+                </button>
+
+
+                <button
+                    class="theme-preset"
+                    data-color="#d65d91"
+                    style="--preview:#d65d91;">
+                    <span></span>
+                    Pink
+                </button>
+
+
+                <button
+                    class="theme-preset"
+                    data-color="#d8873d"
+                    style="--preview:#d8873d;">
+                    <span></span>
+                    Orange
+                </button>
+
+            </div>
+
+
+            <p class="theme-title custom-title">
+                Custom color
+            </p>
+
+
+            <div class="custom-color-row">
+
+                <input
+                    id="customColor"
+                    type="color"
+                    value="#7054d8">
+
+                <span id="colorValue">
+                    #7054D8
+                </span>
+
+            </div>
+
+
+            <button
+                id="resetTheme"
+                class="reset-theme-button">
+                ↻ Reset to default
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= ADMIN / DELETE MODAL ================= -->
+
+<div id="deleteAllModal" class="modal hidden">
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    Delete original words
+                </h2>
+
+                <p>
+                    Remove the original vocabulary bank.
+                </p>
+
+            </div>
+
+            <button
+                id="closeDeleteAll"
+                class="close-modal">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="danger-box">
+
+            <strong>
+                ⚠️ Warning
+            </strong>
+
+            <p>
+                This will delete all original Aldehyel
+                Vocab words from this browser.
+                Your custom words will stay.
+            </p>
+
+        </div>
+
+
+        <button
+            id="deleteAllOriginalButton"
+            class="danger-button">
+            🗑️ Delete All Original Words
+        </button>
 
     </div>
 

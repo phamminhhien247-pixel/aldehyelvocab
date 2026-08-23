@@ -1,13 +1,13 @@
 // ======================================================
-// VOCABFLOW v3
-// Vocabulary + Active Recall + SRS + Study Plan
-// + Quiz + Streak + Dashboard + Shuffle
-// + MARK AS LEARNED
+// ALDEHYEL VOCAB
+// Vocabulary + Active Recall + SRS
+// Study Plan + Quiz + Streak + Dashboard
+// Shuffle + Mark Learned + Theme Customizer
 // ======================================================
 
 
 // ======================================================
-// DEFAULT WORDS - 46 ORIGINAL WORDS
+// DEFAULT WORDS — 46 ORIGINAL WORDS
 // ======================================================
 
 const defaultWords = [
@@ -81,40 +81,70 @@ const defaultWords = [
 // ======================================================
 
 let words = JSON.parse(
-    localStorage.getItem("vocabFlowWords")
+    localStorage.getItem("aldehyelVocabWords")
 );
+
+
+// ======================================================
+// MIGRATE OLD VOCABFLOW DATA
+// ======================================================
 
 if (!words) {
 
-    words = defaultWords.map((item, index) => {
+    const oldWords =
+        JSON.parse(
+            localStorage.getItem("vocabFlowWords")
+        );
 
-        return {
+    if (oldWords) {
 
-            id: index + 1,
+        words = oldWords;
 
-            word: item[0],
-            meaning: item[1],
-            example: item[2],
-            type: item[3],
-            day: item[4],
+        saveWords();
 
-            status: "new",
-            rating: null,
+    }
 
-            reviews: 0,
+}
 
-            nextReview: null,
 
-            createdByUser: false,
+// ======================================================
+// CREATE DEFAULT WORDS
+// ======================================================
 
-            lastReviewed: null,
+if (!words) {
 
-            // NEW
-            learnedDates: []
+    words =
+        defaultWords.map(
+            (item, index) => ({
 
-        };
+                id: index + 1,
 
-    });
+                word: item[0],
+
+                meaning: item[1],
+
+                example: item[2],
+
+                type: item[3],
+
+                day: item[4],
+
+                status: "new",
+
+                rating: null,
+
+                reviews: 0,
+
+                nextReview: null,
+
+                createdByUser: false,
+
+                lastReviewed: null,
+
+                learned: false
+
+            })
+        );
 
     saveWords();
 
@@ -122,19 +152,24 @@ if (!words) {
 
 
 // ======================================================
-// MIGRATE OLD WORD DATA
+// MIGRATE OLD WORD OBJECTS
 // ======================================================
 
 words.forEach(word => {
 
-    if (!Array.isArray(word.learnedDates)) {
-        word.learnedDates = [];
+    if (
+        word.learned === undefined
+    ) {
+
+        word.learned = false;
+
     }
 
-    if (typeof word.createdByUser !== "boolean") {
+    if (
+        word.createdByUser === undefined
+    ) {
 
-        word.createdByUser =
-            false;
+        word.createdByUser = false;
 
     }
 
@@ -147,9 +182,13 @@ saveWords();
 // STUDY PLAN
 // ======================================================
 
-let studyPlan = JSON.parse(
-    localStorage.getItem("vocabFlowStudyPlan")
-);
+let studyPlan =
+    JSON.parse(
+        localStorage.getItem(
+            "aldehyelVocabStudyPlan"
+        )
+    );
+
 
 if (!studyPlan) {
 
@@ -172,7 +211,8 @@ if (!studyPlan) {
 function saveStudyPlan() {
 
     localStorage.setItem(
-        "vocabFlowStudyPlan",
+        "aldehyelVocabStudyPlan",
+
         JSON.stringify(studyPlan)
     );
 
@@ -215,38 +255,58 @@ const counterElement =
 const showAnswerButton =
     document.getElementById("showAnswer");
 
-const deleteWordButton =
-    document.getElementById("deleteWordButton");
-
 const markLearnedButton =
-    document.getElementById("markLearnedButton");
+    document.getElementById(
+        "markLearnedButton"
+    );
+
+const deleteWordButton =
+    document.getElementById(
+        "deleteWordButton"
+    );
 
 const answer =
     document.getElementById("answer");
 
 const recallPrompt =
-    document.getElementById("recallPrompt");
+    document.getElementById(
+        "recallPrompt"
+    );
 
 const ratingButtons =
-    document.querySelectorAll(".rating");
+    document.querySelectorAll(
+        ".rating"
+    );
 
 const previousButton =
-    document.getElementById("previous");
+    document.getElementById(
+        "previous"
+    );
 
 const nextButton =
-    document.getElementById("next");
+    document.getElementById(
+        "next"
+    );
 
 const memoryMap =
-    document.getElementById("memoryMap");
+    document.getElementById(
+        "memoryMap"
+    );
 
 const queueStatus =
-    document.getElementById("queueStatus");
+    document.getElementById(
+        "queueStatus"
+    );
 
 const dailyTarget =
-    document.getElementById("dailyTarget");
+    document.getElementById(
+        "dailyTarget"
+    );
 
 const dailyProgressBar =
-    document.getElementById("dailyProgressBar");
+    document.getElementById(
+        "dailyProgressBar"
+    );
 
 
 // ======================================================
@@ -254,19 +314,29 @@ const dailyProgressBar =
 // ======================================================
 
 const newCount =
-    document.getElementById("newCount");
+    document.getElementById(
+        "newCount"
+    );
 
 const againCount =
-    document.getElementById("againCount");
+    document.getElementById(
+        "againCount"
+    );
 
 const hardCount =
-    document.getElementById("hardCount");
+    document.getElementById(
+        "hardCount"
+    );
 
 const goodCount =
-    document.getElementById("goodCount");
+    document.getElementById(
+        "goodCount"
+    );
 
 const easyCount =
-    document.getElementById("easyCount");
+    document.getElementById(
+        "easyCount"
+    );
 
 
 // ======================================================
@@ -274,16 +344,24 @@ const easyCount =
 // ======================================================
 
 const streakCount =
-    document.getElementById("streakCount");
+    document.getElementById(
+        "streakCount"
+    );
 
 const totalWords =
-    document.getElementById("totalWords");
+    document.getElementById(
+        "totalWords"
+    );
 
 const masteredWords =
-    document.getElementById("masteredWords");
+    document.getElementById(
+        "masteredWords"
+    );
 
 const goalProgress =
-    document.getElementById("goalProgress");
+    document.getElementById(
+        "goalProgress"
+    );
 
 
 // ======================================================
@@ -291,28 +369,44 @@ const goalProgress =
 // ======================================================
 
 const addWordButton =
-    document.getElementById("addWordButton");
+    document.getElementById(
+        "addWordButton"
+    );
 
 const addWordModal =
-    document.getElementById("addWordModal");
+    document.getElementById(
+        "addWordModal"
+    );
 
 const closeModal =
-    document.getElementById("closeModal");
+    document.getElementById(
+        "closeModal"
+    );
 
 const addWordForm =
-    document.getElementById("addWordForm");
+    document.getElementById(
+        "addWordForm"
+    );
 
 const newWord =
-    document.getElementById("newWord");
+    document.getElementById(
+        "newWord"
+    );
 
 const newMeaning =
-    document.getElementById("newMeaning");
+    document.getElementById(
+        "newMeaning"
+    );
 
 const newExample =
-    document.getElementById("newExample");
+    document.getElementById(
+        "newExample"
+    );
 
 const newType =
-    document.getElementById("newType");
+    document.getElementById(
+        "newType"
+    );
 
 
 // ======================================================
@@ -320,25 +414,39 @@ const newType =
 // ======================================================
 
 const studyPlanButton =
-    document.getElementById("studyPlanButton");
+    document.getElementById(
+        "studyPlanButton"
+    );
 
 const studyPlanModal =
-    document.getElementById("studyPlanModal");
+    document.getElementById(
+        "studyPlanModal"
+    );
 
 const closeStudyPlan =
-    document.getElementById("closeStudyPlan");
+    document.getElementById(
+        "closeStudyPlan"
+    );
 
 const wordsPerDay =
-    document.getElementById("wordsPerDay");
+    document.getElementById(
+        "wordsPerDay"
+    );
 
 const studyDays =
-    document.getElementById("studyDays");
+    document.getElementById(
+        "studyDays"
+    );
 
 const planTotal =
-    document.getElementById("planTotal");
+    document.getElementById(
+        "planTotal"
+    );
 
 const saveStudyPlanButton =
-    document.getElementById("saveStudyPlan");
+    document.getElementById(
+        "saveStudyPlan"
+    );
 
 
 // ======================================================
@@ -346,25 +454,39 @@ const saveStudyPlanButton =
 // ======================================================
 
 const quizButton =
-    document.getElementById("quizButton");
+    document.getElementById(
+        "quizButton"
+    );
 
 const quizModal =
-    document.getElementById("quizModal");
+    document.getElementById(
+        "quizModal"
+    );
 
 const closeQuiz =
-    document.getElementById("closeQuiz");
+    document.getElementById(
+        "closeQuiz"
+    );
 
 const quizWord =
-    document.getElementById("quizWord");
+    document.getElementById(
+        "quizWord"
+    );
 
 const quizOptions =
-    document.getElementById("quizOptions");
+    document.getElementById(
+        "quizOptions"
+    );
 
 const quizResult =
-    document.getElementById("quizResult");
+    document.getElementById(
+        "quizResult"
+    );
 
 const nextQuiz =
-    document.getElementById("nextQuiz");
+    document.getElementById(
+        "nextQuiz"
+    );
 
 
 // ======================================================
@@ -372,7 +494,69 @@ const nextQuiz =
 // ======================================================
 
 const shuffleButton =
-    document.getElementById("shuffleButton");
+    document.getElementById(
+        "shuffleButton"
+    );
+
+
+// ======================================================
+// THEME
+// ======================================================
+
+const themeButton =
+    document.getElementById(
+        "themeButton"
+    );
+
+const themeModal =
+    document.getElementById(
+        "themeModal"
+    );
+
+const closeTheme =
+    document.getElementById(
+        "closeTheme"
+    );
+
+const customColor =
+    document.getElementById(
+        "customColor"
+    );
+
+const colorValue =
+    document.getElementById(
+        "colorValue"
+    );
+
+const resetTheme =
+    document.getElementById(
+        "resetTheme"
+    );
+
+const themePresets =
+    document.querySelectorAll(
+        ".theme-preset"
+    );
+
+
+// ======================================================
+// DELETE ALL
+// ======================================================
+
+const deleteAllModal =
+    document.getElementById(
+        "deleteAllModal"
+    );
+
+const closeDeleteAll =
+    document.getElementById(
+        "closeDeleteAll"
+    );
+
+const deleteAllOriginalButton =
+    document.getElementById(
+        "deleteAllOriginalButton"
+    );
 
 
 // ======================================================
@@ -382,7 +566,8 @@ const shuffleButton =
 function saveWords() {
 
     localStorage.setItem(
-        "vocabFlowWords",
+        "aldehyelVocabWords",
+
         JSON.stringify(words)
     );
 
@@ -393,138 +578,33 @@ function saveWords() {
 // DATE HELPERS
 // ======================================================
 
-function getDateKey(date = new Date()) {
+function getDateKey(
+    date = new Date()
+) {
 
-    return date.toISOString().split("T")[0];
+    return date
+        .toISOString()
+        .split("T")[0];
 
 }
 
 
-function isToday(dateString) {
+function isToday(
+    dateString
+) {
 
     if (!dateString) {
+
         return false;
-    }
-
-    return getDateKey(
-        new Date(dateString)
-    ) === getDateKey();
-
-}
-
-
-// ======================================================
-// LEARNED STATUS
-// ======================================================
-
-function hasLearnedToday(word) {
-
-    if (!Array.isArray(word.learnedDates)) {
-        return false;
-    }
-
-    const today =
-        getDateKey();
-
-    return word.learnedDates.includes(
-        today
-    );
-
-}
-
-
-// ======================================================
-// MARK AS LEARNED
-// ======================================================
-
-function markCurrentWordAsLearned() {
-
-    if (words.length === 0) {
-        return;
-    }
-
-    const currentWord =
-        words[currentIndex];
-
-    if (!Array.isArray(currentWord.learnedDates)) {
-
-        currentWord.learnedDates = [];
 
     }
 
-    const today =
-        getDateKey();
-
-
-    // Already counted today
-    if (
-        currentWord.learnedDates.includes(
-            today
+    return (
+        getDateKey(
+            new Date(dateString)
         )
-    ) {
-
-        markLearnedButton.textContent =
-            "✓ Learned Today";
-
-        markLearnedButton.classList.add(
-            "learned"
-        );
-
-        return;
-
-    }
-
-
-    // Add today's completion
-    currentWord.learnedDates.push(
-        today
-    );
-
-
-    // Keep last 30 completion records
-    if (
-        currentWord.learnedDates.length > 30
-    ) {
-
-        currentWord.learnedDates =
-            currentWord.learnedDates.slice(-30);
-
-    }
-
-
-    // This is also considered reviewed
-    currentWord.lastReviewed =
-        new Date().toISOString();
-
-
-    saveWords();
-
-
-    markLearnedButton.textContent =
-        "✓ Learned Today";
-
-    markLearnedButton.classList.add(
-        "learned"
-    );
-
-
-    updateDailyProgress();
-
-    updateDashboard();
-
-    updateStats();
-
-    renderMemoryMap();
-
-
-    // Automatically move forward
-    setTimeout(
-        () => {
-
-            moveToNextCard();
-
-        },
-        350
+        ===
+        getDateKey()
     );
 
 }
@@ -536,20 +616,40 @@ function markCurrentWordAsLearned() {
 
 function getStatusClass(word) {
 
-    if (word.status === "need-to-learn") {
+    if (
+        word.status ===
+        "need-to-learn"
+    ) {
+
         return "again";
+
     }
 
-    if (word.status === "difficult") {
+    if (
+        word.status ===
+        "difficult"
+    ) {
+
         return "hard";
+
     }
 
-    if (word.status === "learning") {
+    if (
+        word.status ===
+        "learning"
+    ) {
+
         return "good";
+
     }
 
-    if (word.status === "mastered") {
+    if (
+        word.status ===
+        "mastered"
+    ) {
+
         return "easy";
+
     }
 
     return "";
@@ -557,22 +657,44 @@ function getStatusClass(word) {
 }
 
 
-function getStatusText(status) {
+function getStatusText(
+    status
+) {
 
-    if (status === "need-to-learn") {
+    if (
+        status ===
+        "need-to-learn"
+    ) {
+
         return "Need to learn";
+
     }
 
-    if (status === "difficult") {
+    if (
+        status ===
+        "difficult"
+    ) {
+
         return "Difficult";
+
     }
 
-    if (status === "learning") {
+    if (
+        status ===
+        "learning"
+    ) {
+
         return "Learning";
+
     }
 
-    if (status === "mastered") {
+    if (
+        status ===
+        "mastered"
+    ) {
+
         return "Mastered";
+
     }
 
     return "New";
@@ -592,7 +714,9 @@ function renderMemoryMap() {
         (word, index) => {
 
             const button =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
             button.className =
                 "memory-dot";
@@ -611,7 +735,10 @@ function renderMemoryMap() {
             }
 
 
-            if (index === currentIndex) {
+            if (
+                index ===
+                currentIndex
+            ) {
 
                 button.classList.add(
                     "current"
@@ -658,45 +785,66 @@ function renderMemoryMap() {
 function updateStats() {
 
     let newWords = 0;
+
     let againWords = 0;
+
     let hardWords = 0;
+
     let goodWords = 0;
+
     let easyWords = 0;
 
 
     words.forEach(
         word => {
 
-            if (word.status === "new") {
+            if (
+                word.status ===
+                "new"
+            ) {
+
                 newWords++;
+
             }
+
 
             if (
                 word.status ===
                 "need-to-learn"
             ) {
+
                 againWords++;
+
             }
+
 
             if (
                 word.status ===
                 "difficult"
             ) {
+
                 hardWords++;
+
             }
+
 
             if (
                 word.status ===
                 "learning"
             ) {
+
                 goodWords++;
+
             }
+
 
             if (
                 word.status ===
                 "mastered"
             ) {
+
                 easyWords++;
+
             }
 
         }
@@ -734,18 +882,25 @@ function getReviewQueue() {
     const now =
         Date.now();
 
+
     return words.filter(
         word => {
 
-            if (!word.nextReview) {
+            if (
+                !word.nextReview
+            ) {
+
                 return false;
+
             }
+
 
             return (
                 new Date(
                     word.nextReview
                 ).getTime()
-                <= now
+                <=
+                now
             );
 
         }
@@ -764,6 +919,7 @@ function getStudyDay() {
         new Date(
             studyPlan.startDate
         );
+
 
     const now =
         new Date();
@@ -788,8 +944,10 @@ function getStudyDay() {
     const difference =
         Math.floor(
             (
-                today - startDay
-            ) /
+                today -
+                startDay
+            )
+            /
             (
                 1000 *
                 60 *
@@ -823,7 +981,8 @@ function getDailyWords() {
     const start =
         (
             day - 1
-        ) *
+        )
+        *
         studyPlan.wordsPerDay;
 
 
@@ -853,7 +1012,10 @@ function updateDailyProgress() {
     const completed =
         todayWords.filter(
             word =>
-                hasLearnedToday(word)
+                word.lastReviewed &&
+                isToday(
+                    word.lastReviewed
+                )
         ).length;
 
 
@@ -871,10 +1033,13 @@ function updateDailyProgress() {
     const percent =
         target === 0
             ? 0
-            : (
+            :
+            (
                 completed /
                 target
-            ) * 100;
+            )
+            *
+            100;
 
 
     dailyProgressBar.style.width =
@@ -901,7 +1066,7 @@ function updateDailyProgress() {
 
 function calculateStreak() {
 
-    const completedDates =
+    const reviewedDates =
         new Set();
 
 
@@ -909,19 +1074,15 @@ function calculateStreak() {
         word => {
 
             if (
-                Array.isArray(
-                    word.learnedDates
-                )
+                word.lastReviewed
             ) {
 
-                word.learnedDates.forEach(
-                    date => {
-
-                        completedDates.add(
-                            date
-                        );
-
-                    }
+                reviewedDates.add(
+                    getDateKey(
+                        new Date(
+                            word.lastReviewed
+                        )
+                    )
                 );
 
             }
@@ -940,11 +1101,13 @@ function calculateStreak() {
     while (true) {
 
         const key =
-            getDateKey(current);
+            getDateKey(
+                current
+            );
 
 
         if (
-            completedDates.has(
+            reviewedDates.has(
                 key
             )
         ) {
@@ -1015,11 +1178,45 @@ function showCard() {
         wordElement.textContent =
             "No words yet";
 
+        typeElement.textContent =
+            "Vocabulary";
+
+        meaningElement.textContent =
+            "";
+
+        exampleElement.textContent =
+            "";
+
+        counterElement.textContent =
+            "0 / 0";
+
         deleteWordButton.style.display =
             "none";
 
         markLearnedButton.style.display =
             "none";
+
+        showAnswerButton.style.display =
+            "none";
+
+        recallPrompt.style.display =
+            "none";
+
+        answer.style.display =
+            "none";
+
+        document.getElementById(
+            "ratingButtons"
+        ).style.display =
+            "none";
+
+        renderMemoryMap();
+
+        updateStats();
+
+        updateDailyProgress();
+
+        updateDashboard();
 
         return;
 
@@ -1037,6 +1234,15 @@ function showCard() {
     }
 
 
+    if (
+        currentIndex < 0
+    ) {
+
+        currentIndex = 0;
+
+    }
+
+
     const currentWord =
         words[currentIndex];
 
@@ -1044,23 +1250,28 @@ function showCard() {
     wordElement.textContent =
         currentWord.word;
 
+
     typeElement.textContent =
         currentWord.type;
+
 
     meaningElement.textContent =
         currentWord.meaning;
 
+
     exampleElement.textContent =
         `"${currentWord.example}"`;
 
+
     counterElement.textContent =
         `${currentIndex + 1} / ${words.length}`;
+
 
     dayElement.textContent =
         `Day ${getStudyDay()}`;
 
 
-    // Delete only custom words
+    // custom word can be deleted
     if (
         currentWord.createdByUser
     ) {
@@ -1076,34 +1287,17 @@ function showCard() {
     }
 
 
-    // Reset answer
-    answer.style.display =
-        "none";
-
-    recallPrompt.style.display =
-        "flex";
-
-    showAnswerButton.style.display =
-        "block";
-
-
-    document.getElementById(
-        "ratingButtons"
-    ).style.display =
-        "none";
-
-
-    // Learned button
+    // mark learned button
     markLearnedButton.style.display =
         "block";
 
 
     if (
-        hasLearnedToday(currentWord)
+        currentWord.learned
     ) {
 
         markLearnedButton.textContent =
-            "✓ Learned Today";
+            "✓ Learned";
 
         markLearnedButton.classList.add(
             "learned"
@@ -1119,6 +1313,24 @@ function showCard() {
         );
 
     }
+
+
+    answer.style.display =
+        "none";
+
+
+    recallPrompt.style.display =
+        "flex";
+
+
+    showAnswerButton.style.display =
+        "block";
+
+
+    document.getElementById(
+        "ratingButtons"
+    ).style.display =
+        "none";
 
 
     renderMemoryMap();
@@ -1143,8 +1355,10 @@ showAnswerButton.addEventListener(
         answer.style.display =
             "block";
 
+
         recallPrompt.style.display =
             "none";
+
 
         showAnswerButton.style.display =
             "none";
@@ -1160,12 +1374,66 @@ showAnswerButton.addEventListener(
 
 
 // ======================================================
-// MARK AS LEARNED BUTTON
+// MARK LEARNED
 // ======================================================
 
 markLearnedButton.addEventListener(
     "click",
-    markCurrentWordAsLearned
+    () => {
+
+        if (
+            words.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        const currentWord =
+            words[currentIndex];
+
+
+        if (
+            currentWord.learned
+        ) {
+
+            return;
+
+        }
+
+
+        currentWord.learned =
+            true;
+
+
+        currentWord.lastReviewed =
+            new Date().toISOString();
+
+
+        if (
+            currentWord.status ===
+            "new"
+        ) {
+
+            currentWord.status =
+                "learning";
+
+        }
+
+
+        saveWords();
+
+
+        updateDailyProgress();
+
+        updateDashboard();
+
+        renderMemoryMap();
+
+        showCard();
+
+    }
 );
 
 
@@ -1180,6 +1448,15 @@ ratingButtons.forEach(
             "click",
             () => {
 
+                if (
+                    words.length === 0
+                ) {
+
+                    return;
+
+                }
+
+
                 const rating =
                     button.dataset.rating;
 
@@ -1192,40 +1469,24 @@ ratingButtons.forEach(
                     rating;
 
 
-                currentWord.reviews++;
+                currentWord.reviews =
+                    (
+                        currentWord.reviews
+                        ||
+                        0
+                    )
+                    +
+                    1;
 
 
                 currentWord.lastReviewed =
                     new Date().toISOString();
 
 
-                // Rating also counts as studying
-                if (
-                    !Array.isArray(
-                        currentWord.learnedDates
-                    )
-                ) {
-
-                    currentWord.learnedDates = [];
-
-                }
-
-
-                const today =
-                    getDateKey();
-
-
-                if (
-                    !currentWord.learnedDates.includes(
-                        today
-                    )
-                ) {
-
-                    currentWord.learnedDates.push(
-                        today
-                    );
-
-                }
+                // rating automatically means
+                // the learner has studied the word
+                currentWord.learned =
+                    true;
 
 
                 if (
@@ -1308,8 +1569,11 @@ function calculateNextReview(
     ) {
 
         return new Date(
-            Date.now() +
-            10 * 60 * 1000
+            Date.now()
+            +
+            10 *
+            60 *
+            1000
         ).toISOString();
 
     }
@@ -1367,7 +1631,8 @@ function calculateNextReview(
 
 
     return new Date(
-        Date.now() +
+        Date.now()
+        +
         days *
         24 *
         60 *
@@ -1383,13 +1648,6 @@ function calculateNextReview(
 // ======================================================
 
 function moveToNextCard() {
-
-    if (
-        words.length === 0
-    ) {
-        return;
-    }
-
 
     if (
         currentIndex <
@@ -1503,14 +1761,16 @@ shuffleButton.addEventListener(
 
 
         for (
-            let i = words.length - 1;
+            let i =
+                words.length - 1;
             i > 0;
             i--
         ) {
 
             const j =
                 Math.floor(
-                    Math.random() *
+                    Math.random()
+                    *
                     (i + 1)
                 );
 
@@ -1596,11 +1856,14 @@ addWordForm.addEventListener(
         const word =
             newWord.value.trim();
 
+
         const meaning =
             newMeaning.value.trim();
 
+
         const example =
             newExample.value.trim();
+
 
         const type =
             newType.value;
@@ -1618,8 +1881,7 @@ addWordForm.addEventListener(
 
         words.push({
 
-            id:
-                Date.now(),
+            id: Date.now(),
 
             word,
 
@@ -1633,26 +1895,19 @@ addWordForm.addEventListener(
 
             day: null,
 
-            status:
-                "new",
+            status: "new",
 
-            rating:
-                null,
+            rating: null,
 
-            reviews:
-                0,
+            reviews: 0,
 
-            nextReview:
-                null,
+            nextReview: null,
 
-            createdByUser:
-                true,
+            createdByUser: true,
 
-            lastReviewed:
-                null,
+            lastReviewed: null,
 
-            learnedDates:
-                []
+            learned: false
 
         });
 
@@ -1673,7 +1928,7 @@ addWordForm.addEventListener(
 
 
 // ======================================================
-// DELETE WORD
+// DELETE CUSTOM WORD
 // ======================================================
 
 deleteWordButton.addEventListener(
@@ -1698,7 +1953,7 @@ deleteWordButton.addEventListener(
         ) {
 
             alert(
-                "The original VocabFlow words cannot be deleted."
+                "The original Aldehyel Vocab words cannot be deleted individually."
             );
 
             return;
@@ -1713,7 +1968,9 @@ deleteWordButton.addEventListener(
 
 
         if (!confirmed) {
+
             return;
+
         }
 
 
@@ -1747,7 +2004,7 @@ deleteWordButton.addEventListener(
 
 
 // ======================================================
-// STUDY PLAN MODAL
+// STUDY PLAN
 // ======================================================
 
 studyPlanButton.addEventListener(
@@ -1757,10 +2014,13 @@ studyPlanButton.addEventListener(
         wordsPerDay.value =
             studyPlan.wordsPerDay;
 
+
         studyDays.value =
             studyPlan.days;
 
+
         updatePlanPreview();
+
 
         studyPlanModal.classList.remove(
             "hidden"
@@ -1800,13 +2060,17 @@ function updatePlanPreview() {
     const daily =
         Number(
             wordsPerDay.value
-        ) || 0;
+        )
+        ||
+        0;
 
 
     const days =
         Number(
             studyDays.value
-        ) || 0;
+        )
+        ||
+        0;
 
 
     planTotal.textContent =
@@ -1826,10 +2090,6 @@ studyDays.addEventListener(
     updatePlanPreview
 );
 
-
-// ======================================================
-// SAVE STUDY PLAN
-// ======================================================
 
 saveStudyPlanButton.addEventListener(
     "click",
@@ -1902,6 +2162,7 @@ quizButton.addEventListener(
             "hidden"
         );
 
+
         startQuiz();
 
     }
@@ -1938,9 +2199,13 @@ document
 
 function startQuiz() {
 
-    quizAnswered = false;
+    quizAnswered =
+        false;
 
-    quizResult.textContent = "";
+
+    quizResult.textContent =
+        "";
+
 
     nextQuiz.style.display =
         "none";
@@ -1948,7 +2213,8 @@ function startQuiz() {
 
     quizIndex =
         Math.floor(
-            Math.random() *
+            Math.random()
+            *
             words.length
         );
 
@@ -1967,7 +2233,8 @@ function startQuiz() {
         );
 
 
-    quizOptions.innerHTML = "";
+    quizOptions.innerHTML =
+        "";
 
 
     options.forEach(
@@ -2061,7 +2328,8 @@ function answerQuiz(
     }
 
 
-    quizAnswered = true;
+    quizAnswered =
+        true;
 
 
     const allOptions =
@@ -2135,6 +2403,471 @@ nextQuiz.addEventListener(
 
 
 // ======================================================
+// THEME SYSTEM
+// ======================================================
+
+function hexToRgb(hex) {
+
+    hex =
+        hex.replace(
+            "#",
+            ""
+        );
+
+
+    const bigint =
+        parseInt(
+            hex,
+            16
+        );
+
+
+    return {
+
+        r:
+            (bigint >> 16)
+            &
+            255,
+
+        g:
+            (bigint >> 8)
+            &
+            255,
+
+        b:
+            bigint
+            &
+            255
+
+    };
+
+}
+
+
+function setThemeColor(
+    color
+) {
+
+    const rgb =
+        hexToRgb(
+            color
+        );
+
+
+    const root =
+        document.documentElement;
+
+
+    root.style.setProperty(
+        "--accent",
+        color
+    );
+
+
+    root.style.setProperty(
+        "--accent-dark",
+        shadeColor(
+            color,
+            -12
+        )
+    );
+
+
+    root.style.setProperty(
+        "--accent-light",
+        hexToRgba(
+            color,
+            0.10
+        )
+    );
+
+
+    root.style.setProperty(
+        "--accent-soft",
+        hexToRgba(
+            color,
+            0.045
+        )
+    );
+
+
+    root.style.setProperty(
+        "--accent-border",
+        hexToRgba(
+            color,
+            0.20
+        )
+    );
+
+
+    root.style.setProperty(
+        "--accent-shadow",
+        `rgba(
+            ${rgb.r},
+            ${rgb.g},
+            ${rgb.b},
+            0.22
+        )`
+    );
+
+
+    customColor.value =
+        color;
+
+
+    colorValue.textContent =
+        color.toUpperCase();
+
+
+    localStorage.setItem(
+        "aldehyelVocabTheme",
+        color
+    );
+
+}
+
+
+function hexToRgba(
+    hex,
+    alpha
+) {
+
+    const rgb =
+        hexToRgb(
+            hex
+        );
+
+
+    return `rgba(
+        ${rgb.r},
+        ${rgb.g},
+        ${rgb.b},
+        ${alpha}
+    )`;
+
+}
+
+
+function shadeColor(
+    color,
+    percent
+) {
+
+    let R =
+        parseInt(
+            color.substring(
+                1,
+                3
+            ),
+            16
+        );
+
+
+    let G =
+        parseInt(
+            color.substring(
+                3,
+                5
+            ),
+            16
+        );
+
+
+    let B =
+        parseInt(
+            color.substring(
+                5,
+                7
+            ),
+            16
+        );
+
+
+    R =
+        Math.max(
+            0,
+            Math.min(
+                255,
+                R *
+                (
+                    100 +
+                    percent
+                )
+                /
+                100
+            )
+        );
+
+
+    G =
+        Math.max(
+            0,
+            Math.min(
+                255,
+                G *
+                (
+                    100 +
+                    percent
+                )
+                /
+                100
+            )
+        );
+
+
+    B =
+        Math.max(
+            0,
+            Math.min(
+                255,
+                B *
+                (
+                    100 +
+                    percent
+                )
+                /
+                100
+            )
+        );
+
+
+    return "#" +
+        [R, G, B]
+            .map(
+                x =>
+                    Math.round(x)
+                        .toString(16)
+                        .padStart(
+                            2,
+                            "0"
+                        )
+            )
+            .join("");
+
+}
+
+
+// Load saved theme
+const savedTheme =
+    localStorage.getItem(
+        "aldehyelVocabTheme"
+    );
+
+
+if (savedTheme) {
+
+    setThemeColor(
+        savedTheme
+    );
+
+}
+
+
+themeButton.addEventListener(
+    "click",
+    () => {
+
+        themeModal.classList.remove(
+            "hidden"
+        );
+
+    }
+);
+
+
+closeTheme.addEventListener(
+    "click",
+    () => {
+
+        themeModal.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+
+document
+    .querySelector(
+        "#themeModal .modal-overlay"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            themeModal.classList.add(
+                "hidden"
+            );
+
+        }
+    );
+
+
+themePresets.forEach(
+    preset => {
+
+        preset.addEventListener(
+            "click",
+            () => {
+
+                setThemeColor(
+                    preset.dataset.color
+                );
+
+            }
+        );
+
+    }
+);
+
+
+customColor.addEventListener(
+    "input",
+    () => {
+
+        setThemeColor(
+            customColor.value
+        );
+
+    }
+);
+
+
+resetTheme.addEventListener(
+    "click",
+    () => {
+
+        setThemeColor(
+            "#7054d8"
+        );
+
+    }
+);
+
+
+// ======================================================
+// DELETE ALL ORIGINAL WORDS
+// ======================================================
+
+deleteAllModal.addEventListener(
+    "click",
+    () => {}
+);
+
+
+// Hidden access:
+// double-click the brand icon
+document
+    .querySelector(
+        ".brand-icon"
+    )
+    .addEventListener(
+        "dblclick",
+        () => {
+
+            deleteAllModal.classList.remove(
+                "hidden"
+            );
+
+        }
+    );
+
+
+closeDeleteAll.addEventListener(
+    "click",
+    () => {
+
+        deleteAllModal.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+
+document
+    .querySelector(
+        "#deleteAllModal .modal-overlay"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            deleteAllModal.classList.add(
+                "hidden"
+            );
+
+        }
+    );
+
+
+deleteAllOriginalButton.addEventListener(
+    "click",
+    () => {
+
+        const originalCount =
+            words.filter(
+                word =>
+                    !word.createdByUser
+            ).length;
+
+
+        if (
+            originalCount === 0
+        ) {
+
+            alert(
+                "There are no original words left."
+            );
+
+            return;
+
+        }
+
+
+        const confirmed =
+            confirm(
+                `Delete all ${originalCount} original words? Your custom words will NOT be deleted.`
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        words =
+            words.filter(
+                word =>
+                    word.createdByUser
+            );
+
+
+        currentIndex = 0;
+
+
+        saveWords();
+
+
+        deleteAllModal.classList.add(
+            "hidden"
+        );
+
+
+        showCard();
+
+
+        alert(
+            "🗑️ All original words have been deleted."
+        );
+
+    }
+);
+
+
+// ======================================================
 // KEYBOARD
 // ======================================================
 
@@ -2143,19 +2876,29 @@ document.addEventListener(
     event => {
 
         if (
-            event.code === "Space" &&
-            answer.style.display !== "block"
+            event.code === "Space"
+            &&
+            answer.style.display !==
+            "block"
         ) {
 
             event.preventDefault();
 
-            showAnswerButton.click();
+            if (
+                showAnswerButton.style.display !==
+                "none"
+            ) {
+
+                showAnswerButton.click();
+
+            }
 
         }
 
 
         if (
-            event.key === "ArrowRight"
+            event.key ===
+            "ArrowRight"
         ) {
 
             nextButton.click();
@@ -2164,7 +2907,8 @@ document.addEventListener(
 
 
         if (
-            event.key === "ArrowLeft"
+            event.key ===
+            "ArrowLeft"
         ) {
 
             previousButton.click();
