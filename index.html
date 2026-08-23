@@ -3,21 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Aldehyel Vocab – English Vocabulary Flashcards</title>
-
-    <meta
-        name="description"
-        content="Aldehyel Vocab is an English vocabulary learning website with flashcards, active recall, quizzes and spaced repetition."
-    >
-
-    <meta
-        name="keywords"
-        content="Aldehyel Vocab, English vocabulary, vocabulary flashcards, English learning, active recall, spaced repetition, vocabulary quiz"
-    >
-
-    <meta name="robots" content="index, follow">
-
+    <title>VocabFlow</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -29,18 +15,13 @@
     <header class="top-bar">
 
         <div class="brand">
-
-            <div class="brand-icon">
-                A
-            </div>
+            <div class="brand-icon">V</div>
 
             <div>
-                <h1>Aldehyel Vocab</h1>
+                <h1>VocabFlow</h1>
                 <p>Learn smarter. Remember longer.</p>
             </div>
-
         </div>
-
 
         <div class="header-actions">
 
@@ -105,7 +86,6 @@
 
         </div>
 
-
         <div id="memoryMap" class="memory-map"></div>
 
     </section>
@@ -122,18 +102,15 @@
             🗑️
         </button>
 
-
         <div class="card-content">
 
             <div class="active-label">
                 ACTIVE RECALL
             </div>
 
-
             <div id="type" class="word-type">
                 Phrasal Verb
             </div>
-
 
             <div class="word-area">
 
@@ -162,7 +139,6 @@
                     </small>
 
                 </div>
-
 
                 <div class="daily-progress">
 
@@ -220,7 +196,6 @@
 
                 </div>
 
-
                 <div class="answer-section">
 
                     <span class="answer-label">
@@ -242,13 +217,21 @@
             </button>
 
 
+            <!-- MARK AS LEARNED -->
+            <button
+                id="markLearnedButton"
+                class="mark-learned-button"
+            >
+                ✓ Mark as Learned
+            </button>
+
+
             <!-- RATING -->
             <div id="ratingButtons" class="rating-buttons">
 
                 <p class="rating-title">
                     How well did you remember it?
                 </p>
-
 
                 <div class="rating-grid">
 
@@ -261,7 +244,6 @@
                         <small>Need to learn</small>
                     </button>
 
-
                     <button
                         class="rating rating-hard"
                         data-rating="hard"
@@ -271,7 +253,6 @@
                         <small>Difficult</small>
                     </button>
 
-
                     <button
                         class="rating rating-good"
                         data-rating="good"
@@ -280,7 +261,6 @@
                         Good
                         <small>Learning</small>
                     </button>
-
 
                     <button
                         class="rating rating-easy"
@@ -303,7 +283,6 @@
                     ← Previous
                 </button>
 
-
                 <div class="study-status">
 
                     <span class="status-dot"></span>
@@ -313,7 +292,6 @@
                     </span>
 
                 </div>
-
 
                 <button id="next" class="nav-btn">
                     Next →
@@ -387,9 +365,8 @@
     </section>
 
 
-    <!-- FOOTER -->
     <footer>
-        Aldehyel Vocab · Built for smarter vocabulary learning
+        VocabFlow · Built for smarter vocabulary learning
     </footer>
 
 </div>
@@ -399,7 +376,6 @@
 <div id="addWordModal" class="modal hidden">
 
     <div class="modal-overlay"></div>
-
 
     <div class="modal-box">
 
@@ -416,7 +392,6 @@
                 </p>
 
             </div>
-
 
             <button id="closeModal" class="close-modal">
                 ×
@@ -436,6 +411,7 @@
                     placeholder="e.g. broaden one's horizons"
                     required
                 >
+
             </label>
 
 
@@ -448,6 +424,7 @@
                     placeholder="e.g. mở rộng tầm nhìn"
                     required
                 >
+
             </label>
 
 
@@ -496,7 +473,6 @@
 
     <div class="modal-overlay"></div>
 
-
     <div class="modal-box">
 
         <div class="modal-header">
@@ -512,7 +488,6 @@
                 </p>
 
             </div>
-
 
             <button id="closeStudyPlan" class="close-modal">
                 ×
@@ -533,6 +508,7 @@
                     max="100"
                     value="10"
                 >
+
             </label>
 
 
@@ -546,6 +522,7 @@
                     max="365"
                     value="15"
                 >
+
             </label>
 
 
@@ -581,7 +558,6 @@
 
     <div class="modal-overlay"></div>
 
-
     <div class="modal-box quiz-box">
 
         <div class="modal-header">
@@ -598,7 +574,6 @@
 
             </div>
 
-
             <button id="closeQuiz" class="close-modal">
                 ×
             </button>
@@ -612,17 +587,13 @@
                 What does this word mean?
             </span>
 
-
             <h2 id="quizWord">
                 give up
             </h2>
 
-
             <div id="quizOptions" class="quiz-options"></div>
 
-
             <div id="quizResult" class="quiz-result"></div>
-
 
             <button
                 id="nextQuiz"

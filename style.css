@@ -549,12 +549,46 @@ button {
 
     transition: 0.2s ease;
 
-    margin-bottom: 18px;
+    margin-bottom: 10px;
 }
 
 .show-answer-btn:hover {
     background: #6046c6;
     transform: translateY(-1px);
+}
+
+
+/* ================= MARK LEARNED ================= */
+
+.mark-learned-button {
+    min-width: 190px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #bfe2ce;
+    border-radius: 10px;
+
+    background: #eefaf3;
+    color: #39865a;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    transition: 0.2s ease;
+
+    margin-bottom: 18px;
+}
+
+.mark-learned-button:hover {
+    background: #dff5e8;
+    border-color: #9fd3b4;
+    transform: translateY(-1px);
+}
+
+.mark-learned-button.learned {
+    background: #d9f1e2;
+    border-color: #8fc9a7;
+    color: #34794f;
 }
 
 
@@ -905,6 +939,7 @@ input:focus,
 textarea:focus,
 select:focus {
     border-color: #8a75dc;
+
     background: white;
 }
 
@@ -919,6 +954,7 @@ textarea {
     border-radius: 10px;
 
     background: #7054d8;
+
     color: white;
 
     padding: 11px;
@@ -1090,7 +1126,7 @@ textarea {
     }
 
     .flashcard {
-        min-height: 620px;
+        min-height: 650px;
     }
 
     .rating-grid {
