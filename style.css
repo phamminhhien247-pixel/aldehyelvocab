@@ -1,15 +1,3 @@
-:root {
-    --accent: #7054d8;
-    --accent-dark: #6046c6;
-    --accent-light: #eeeafa;
-    --accent-soft: #f8f6ff;
-    --accent-border: #e5def8;
-    --accent-shadow: rgba(112, 84, 216, 0.22);
-}
-
-
-/* ================= RESET ================= */
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -80,14 +68,14 @@ button {
     justify-content: center;
 
     border-radius: 13px;
-    background: var(--accent);
+    background: #7054d8;
     color: white;
 
     font-size: 21px;
     font-weight: 800;
 
     box-shadow:
-        0 8px 18px var(--accent-shadow);
+        0 8px 18px rgba(112, 84, 216, 0.2);
 }
 
 
@@ -114,7 +102,7 @@ button {
 .header-button {
     border: 1px solid #ded8ef;
     background: white;
-    color: var(--accent);
+    color: #684dcc;
 
     padding: 10px 13px;
     border-radius: 10px;
@@ -127,7 +115,7 @@ button {
 
 
 .header-button:hover {
-    background: var(--accent-soft);
+    background: #f5f1ff;
     transform: translateY(-1px);
 }
 
@@ -139,8 +127,8 @@ button {
     padding: 10px 12px;
     border-radius: 10px;
 
-    background: var(--accent-light);
-    color: var(--accent);
+    background: #eeeafa;
+    color: #665b86;
 
     font-size: 12px;
     font-weight: 700;
@@ -232,10 +220,8 @@ button {
 
 .memory-map {
     display: grid;
-
     grid-template-columns:
         repeat(auto-fit, minmax(31px, 1fr));
-
     gap: 6px;
 }
 
@@ -262,7 +248,7 @@ button {
 
 
 .memory-dot.current {
-    outline: 2px solid var(--accent);
+    outline: 2px solid #765bd8;
     outline-offset: 1px;
 }
 
@@ -292,6 +278,229 @@ button {
     background: #e5effd;
     color: #4e7fc4;
     border-color: #c9ddf8;
+}
+
+
+/* =====================================================
+   MOTIVATION IMAGE
+   ===================================================== */
+
+.motivation-card {
+    position: relative;
+
+    min-height: 180px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f8f5ff
+        );
+
+    border: 1px solid #e9e5f2;
+    border-radius: 18px;
+
+    margin-bottom: 16px;
+
+    padding: 20px 30px;
+
+    box-shadow:
+        0 8px 25px rgba(53, 42, 95, 0.05);
+}
+
+
+.motivation-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    background: rgba(112, 84, 216, 0.06);
+
+    left: 40%;
+    top: -80px;
+
+    pointer-events: none;
+}
+
+
+.motivation-text {
+    position: relative;
+    z-index: 2;
+
+    max-width: 500px;
+}
+
+
+.motivation-label {
+    display: inline-block;
+
+    color: #765bd8;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.6px;
+
+    margin-bottom: 7px;
+}
+
+
+.motivation-text h2 {
+    color: #302a45;
+
+    font-size: 22px;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+
+    margin-bottom: 6px;
+}
+
+
+.motivation-text p {
+    color: #928ca0;
+
+    font-size: 11px;
+    line-height: 1.5;
+
+    max-width: 380px;
+}
+
+
+.motivation-dots {
+    display: flex;
+    gap: 5px;
+
+    margin-top: 13px;
+}
+
+
+.motivation-dots span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #b5a9e9;
+
+    animation:
+        dotPulse 1.8s ease-in-out infinite;
+}
+
+
+.motivation-dots span:nth-child(2) {
+    animation-delay: 0.25s;
+}
+
+
+.motivation-dots span:nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+
+.motivation-image-wrapper {
+    position: relative;
+
+    width: 210px;
+    height: 180px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2;
+
+    flex-shrink: 0;
+}
+
+
+.motivation-image {
+    width: 160px;
+    height: 190px;
+
+    object-fit: cover;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 14px 30px rgba(48, 39, 75, 0.16);
+
+    transform-origin: bottom center;
+
+    animation:
+        vocabFloat 3.6s ease-in-out infinite;
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+
+.motivation-image:hover {
+    animation-play-state: paused;
+
+    transform:
+        translateY(-6px)
+        rotate(2deg)
+        scale(1.04);
+
+    box-shadow:
+        0 18px 35px rgba(48, 39, 75, 0.22);
+}
+
+
+@keyframes vocabFloat {
+
+    0%,
+    100% {
+        transform:
+            translateY(0)
+            rotate(-1deg);
+    }
+
+    25% {
+        transform:
+            translateY(-5px)
+            rotate(1deg);
+    }
+
+    50% {
+        transform:
+            translateY(-9px)
+            rotate(-1deg);
+    }
+
+    75% {
+        transform:
+            translateY(-4px)
+            rotate(1deg);
+    }
+}
+
+
+@keyframes dotPulse {
+
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
 }
 
 
@@ -357,6 +566,9 @@ button {
 .delete-word-button:hover {
     background: #fff1f1;
     border-color: #f0caca;
+
+    color: #d95353;
+
     transform: scale(1.08);
 }
 
@@ -388,8 +600,8 @@ button {
 
     border-radius: 20px;
 
-    background: var(--accent-light);
-    color: var(--accent);
+    background: #eeeafa;
+    color: #7257c8;
 
     font-size: 11px;
     font-weight: 700;
@@ -411,6 +623,7 @@ button {
 .word-hint {
     color: #aaa4b2;
     font-size: 12px;
+
     margin-bottom: 9px;
 }
 
@@ -458,7 +671,7 @@ button {
 
 
 .study-day span {
-    color: var(--accent);
+    color: #684dcc;
     font-size: 12px;
     font-weight: 800;
 }
@@ -502,7 +715,7 @@ button {
     width: 0%;
     height: 100%;
 
-    background: var(--accent);
+    background: #765bd8;
     border-radius: 10px;
 
     transition: width 0.3s ease;
@@ -521,8 +734,8 @@ button {
 
     padding: 13px 16px;
 
-    background: var(--accent-soft);
-    border: 1px solid var(--accent-border);
+    background: #f8f6ff;
+    border: 1px solid #e9e4f7;
 
     border-radius: 12px;
 
@@ -544,6 +757,7 @@ button {
 .recall-prompt p {
     color: #9b95a8;
     font-size: 10px;
+
     margin-top: 3px;
 }
 
@@ -552,6 +766,7 @@ button {
 
 .answer {
     width: min(600px, 100%);
+
     display: none;
 
     margin-bottom: 18px;
@@ -570,7 +785,7 @@ button {
 
 
 .answer-label {
-    color: var(--accent);
+    color: #7968a9;
 
     font-size: 9px;
     font-weight: 800;
@@ -599,60 +814,24 @@ button {
     border: none;
     border-radius: 10px;
 
-    background: var(--accent);
+    background: #7054d8;
     color: white;
 
     font-size: 12px;
     font-weight: 800;
 
     box-shadow:
-        0 7px 18px var(--accent-shadow);
+        0 7px 18px rgba(112, 84, 216, 0.22);
 
     transition: 0.2s ease;
 
-    margin-bottom: 10px;
+    margin-bottom: 18px;
 }
 
 
 .show-answer-btn:hover {
-    background: var(--accent-dark);
+    background: #6046c6;
     transform: translateY(-1px);
-}
-
-
-/* ================= MARK LEARNED ================= */
-
-.mark-learned-btn {
-    min-width: 170px;
-
-    padding: 10px 20px;
-
-    border: 1px solid var(--accent-border);
-    border-radius: 10px;
-
-    background: var(--accent-soft);
-    color: var(--accent);
-
-    font-size: 11px;
-    font-weight: 800;
-
-    margin-bottom: 17px;
-
-    transition: 0.2s ease;
-}
-
-
-.mark-learned-btn:hover {
-    background: var(--accent);
-    color: white;
-    transform: translateY(-1px);
-}
-
-
-.mark-learned-btn.learned {
-    background: #e7f6ed;
-    color: #3d8959;
-    border-color: #b7dec6;
 }
 
 
@@ -856,7 +1035,7 @@ button {
 
     border-radius: 9px;
 
-    background: var(--accent-light);
+    background: #f4f0ff;
 
     font-size: 16px;
 }
@@ -872,12 +1051,14 @@ button {
 
 .dashboard-card small {
     color: #9a93a6;
+
     font-size: 9px;
 }
 
 
 .dashboard-card strong {
     color: #514967;
+
     font-size: 13px;
 }
 
@@ -949,7 +1130,6 @@ footer {
     display: flex;
 
     justify-content: space-between;
-
     align-items: flex-start;
 
     margin-bottom: 20px;
@@ -1036,7 +1216,7 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-    border-color: var(--accent);
+    border-color: #8a75dc;
 
     background: white;
 }
@@ -1054,8 +1234,7 @@ textarea {
 
     border-radius: 10px;
 
-    background: var(--accent);
-
+    background: #7054d8;
     color: white;
 
     padding: 11px;
@@ -1068,7 +1247,7 @@ textarea {
 
 
 .create-word-button:hover {
-    background: var(--accent-dark);
+    background: #6046c6;
 }
 
 
@@ -1078,16 +1257,15 @@ textarea {
     display: flex;
 
     align-items: center;
-
     justify-content: space-between;
 
     padding: 13px;
 
     border-radius: 10px;
 
-    background: var(--accent-soft);
+    background: #f7f5fd;
 
-    border: 1px solid var(--accent-border);
+    border: 1px solid #e7e2f3;
 
     margin-top: 3px;
 }
@@ -1101,7 +1279,7 @@ textarea {
 
 
 .plan-summary strong {
-    color: var(--accent);
+    color: #674dcc;
 
     font-size: 12px;
 }
@@ -1165,7 +1343,7 @@ textarea {
 .quiz-option:hover {
     border-color: #b9ace8;
 
-    background: var(--accent-soft);
+    background: #f5f1ff;
 }
 
 
@@ -1193,216 +1371,7 @@ textarea {
     margin: 12px 0;
 
     font-size: 11px;
-
     font-weight: 700;
-}
-
-
-/* ================= THEME ================= */
-
-.theme-box {
-    width: min(460px, 92%);
-}
-
-
-.theme-content {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 12px;
-}
-
-
-.theme-title {
-    color: #665f73;
-
-    font-size: 11px;
-
-    font-weight: 800;
-}
-
-
-.theme-presets {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 9px;
-}
-
-
-.theme-preset {
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    padding: 11px;
-
-    border: 1px solid #e6e1ed;
-
-    background: #faf9fc;
-
-    border-radius: 10px;
-
-    color: #595265;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    transition: 0.2s ease;
-}
-
-
-.theme-preset:hover {
-    border-color: var(--accent);
-
-    background: var(--accent-soft);
-
-    transform: translateY(-1px);
-}
-
-
-.theme-preset span {
-    width: 18px;
-    height: 18px;
-
-    border-radius: 50%;
-
-    background: var(--preview);
-
-    border: 2px solid white;
-
-    box-shadow:
-        0 0 0 1px #ddd;
-}
-
-
-.custom-title {
-    margin-top: 8px;
-}
-
-
-.custom-color-row {
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 11px;
-
-    border: 1px solid #e5e0eb;
-
-    border-radius: 10px;
-
-    background: #faf9fc;
-}
-
-
-#customColor {
-    width: 42px;
-    height: 34px;
-
-    padding: 2px;
-
-    border-radius: 7px;
-
-    cursor: pointer;
-}
-
-
-#colorValue {
-    color: #625b6e;
-
-    font-size: 11px;
-
-    font-weight: 700;
-}
-
-
-.reset-theme-button {
-    width: 100%;
-
-    padding: 11px;
-
-    border: 1px solid #e3ddea;
-
-    border-radius: 10px;
-
-    background: white;
-
-    color: #6e6679;
-
-    font-size: 11px;
-
-    font-weight: 700;
-}
-
-
-.reset-theme-button:hover {
-    background: #f7f5fb;
-}
-
-
-/* ================= DANGER ================= */
-
-.danger-box {
-    padding: 14px;
-
-    border-radius: 11px;
-
-    background: #fff5f5;
-
-    border: 1px solid #f3d3d3;
-
-    margin-bottom: 14px;
-}
-
-
-.danger-box strong {
-    color: #c75252;
-
-    font-size: 12px;
-}
-
-
-.danger-box p {
-    color: #8d6d6d;
-
-    font-size: 10px;
-
-    line-height: 1.5;
-
-    margin-top: 5px;
-}
-
-
-.danger-button {
-    width: 100%;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: #d95353;
-
-    color: white;
-
-    padding: 11px;
-
-    font-size: 11px;
-
-    font-weight: 800;
-}
-
-
-.danger-button:hover {
-    background: #c94545;
 }
 
 
@@ -1449,6 +1418,18 @@ textarea {
         flex-direction: column;
     }
 
+
+    .motivation-card {
+        min-height: 175px;
+
+        padding-left: 22px;
+    }
+
+
+    .motivation-image-wrapper {
+        width: 180px;
+    }
+
 }
 
 
@@ -1470,7 +1451,7 @@ textarea {
 
 
     .flashcard {
-        min-height: 650px;
+        min-height: 620px;
     }
 
 
@@ -1519,8 +1500,52 @@ textarea {
     }
 
 
-    .theme-presets {
-        grid-template-columns: 1fr;
+    /* MOBILE MOTIVATION */
+
+    .motivation-card {
+        min-height: 200px;
+
+        padding: 18px;
+
+        align-items: center;
+    }
+
+
+    .motivation-text {
+        max-width: 52%;
+    }
+
+
+    .motivation-text h2 {
+        font-size: 17px;
+    }
+
+
+    .motivation-text p {
+        font-size: 9px;
+    }
+
+
+    .motivation-image-wrapper {
+        width: 45%;
+
+        height: 180px;
+    }
+
+
+    .motivation-image {
+        width: 125px;
+        height: 160px;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .motivation-image,
+    .motivation-dots span {
+        animation: none;
     }
 
 }

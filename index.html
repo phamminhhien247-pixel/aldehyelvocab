@@ -20,7 +20,9 @@
 
         <div class="brand">
 
-            <div class="brand-icon">A</div>
+            <div class="brand-icon">
+                V
+            </div>
 
             <div>
                 <h1>Aldehyel Vocab</h1>
@@ -32,27 +34,38 @@
 
         <div class="header-actions">
 
-            <button id="addWordButton" class="header-button">
+            <button
+                id="addWordButton"
+                class="header-button"
+            >
                 ＋ Add Word
             </button>
 
-            <button id="studyPlanButton" class="header-button">
+            <button
+                id="studyPlanButton"
+                class="header-button"
+            >
                 ⚙ Study Plan
             </button>
 
-            <button id="quizButton" class="header-button">
+            <button
+                id="quizButton"
+                class="header-button"
+            >
                 🧠 Quiz
             </button>
 
-            <button id="shuffleButton" class="header-button">
+            <button
+                id="shuffleButton"
+                class="header-button"
+            >
                 🔀 Shuffle
             </button>
 
-            <button id="themeButton" class="header-button">
-                🎨 Customize
-            </button>
-
-            <div id="counter" class="counter">
+            <div
+                id="counter"
+                class="counter"
+            >
                 1 / 46
             </div>
 
@@ -69,36 +82,95 @@
 
             <div>
                 <h2>Memory Map</h2>
-                <p>Your vocabulary memory at a glance</p>
+
+                <p>
+                    Your vocabulary memory at a glance
+                </p>
             </div>
+
 
             <div class="memory-stats">
 
                 <span class="stat new">
-                    <b id="newCount">0</b> New
+                    <b id="newCount">0</b>
+                    New
                 </span>
 
                 <span class="stat again">
-                    <b id="againCount">0</b> Need to learn
+                    <b id="againCount">0</b>
+                    Need to learn
                 </span>
 
                 <span class="stat hard">
-                    <b id="hardCount">0</b> Difficult
+                    <b id="hardCount">0</b>
+                    Difficult
                 </span>
 
                 <span class="stat good">
-                    <b id="goodCount">0</b> Learning
+                    <b id="goodCount">0</b>
+                    Learning
                 </span>
 
                 <span class="stat easy">
-                    <b id="easyCount">0</b> Mastered
+                    <b id="easyCount">0</b>
+                    Mastered
                 </span>
 
             </div>
 
         </div>
 
-        <div id="memoryMap" class="memory-map"></div>
+
+        <div
+            id="memoryMap"
+            class="memory-map"
+        ></div>
+
+    </section>
+
+
+    <!-- ================= MOTIVATION IMAGE ================= -->
+
+    <section class="motivation-card">
+
+        <div class="motivation-text">
+
+            <span class="motivation-label">
+                STUDY REMINDER
+            </span>
+
+            <h2>
+                Time to revise your vocab!
+            </h2>
+
+            <p>
+                A little review today can make
+                tomorrow's recall much easier.
+            </p>
+
+            <div class="motivation-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+        </div>
+
+
+        <div class="motivation-image-wrapper">
+
+            <!--
+                IMPORTANT:
+                Image must be inside:
+                images/revise-vocab.jpg
+            -->
+
+            <img
+    src="./image/revise-vocab.jpg"
+    alt="Revise vocabulary reminder"
+    class="motivation-image"
+>
+        </div>
 
     </section>
 
@@ -110,7 +182,8 @@
         <button
             id="deleteWordButton"
             class="delete-word-button"
-            title="Delete custom word">
+            title="Delete this word"
+        >
             🗑️
         </button>
 
@@ -121,7 +194,11 @@
                 ACTIVE RECALL
             </div>
 
-            <div id="type" class="word-type">
+
+            <div
+                id="type"
+                class="word-type"
+            >
                 Phrasal Verb
             </div>
 
@@ -139,7 +216,7 @@
             </div>
 
 
-            <!-- STUDY INFO -->
+            <!-- ================= STUDY INFO ================= -->
 
             <div class="study-info">
 
@@ -166,8 +243,8 @@
 
                         <div
                             id="dailyProgressBar"
-                            class="daily-fill">
-                        </div>
+                            class="daily-fill"
+                        ></div>
 
                     </div>
 
@@ -176,9 +253,12 @@
             </div>
 
 
-            <!-- RECALL -->
+            <!-- ================= RECALL PROMPT ================= -->
 
-            <div id="recallPrompt" class="recall-prompt">
+            <div
+                id="recallPrompt"
+                class="recall-prompt"
+            >
 
                 <div class="recall-icon">
                     🧠
@@ -200,9 +280,12 @@
             </div>
 
 
-            <!-- ANSWER -->
+            <!-- ================= ANSWER ================= -->
 
-            <div id="answer" class="answer">
+            <div
+                id="answer"
+                class="answer"
+            >
 
                 <div class="answer-section">
 
@@ -228,61 +311,64 @@
             </div>
 
 
+            <!-- ================= SHOW ANSWER ================= -->
+
             <button
                 id="showAnswer"
-                class="show-answer-btn">
+                class="show-answer-btn"
+            >
                 Show Answer
             </button>
 
 
-            <!-- MARK LEARNED -->
-
-            <button
-                id="markLearnedButton"
-                class="mark-learned-btn">
-                ✓ Mark as Learned
-            </button>
-
-
-            <!-- RATING -->
+            <!-- ================= RATING ================= -->
 
             <div
                 id="ratingButtons"
-                class="rating-buttons">
+                class="rating-buttons"
+            >
 
                 <p class="rating-title">
                     How well did you remember it?
                 </p>
 
+
                 <div class="rating-grid">
 
                     <button
                         class="rating rating-again"
-                        data-rating="again">
+                        data-rating="again"
+                    >
                         <span>🔴</span>
                         Again
                         <small>Need to learn</small>
                     </button>
 
+
                     <button
                         class="rating rating-hard"
-                        data-rating="hard">
+                        data-rating="hard"
+                    >
                         <span>🟠</span>
                         Hard
                         <small>Difficult</small>
                     </button>
 
+
                     <button
                         class="rating rating-good"
-                        data-rating="good">
+                        data-rating="good"
+                    >
                         <span>🟢</span>
                         Good
                         <small>Learning</small>
                     </button>
 
+
                     <button
                         class="rating rating-easy"
-                        data-rating="easy">
+                        data-rating="easy"
+                    >
                         <span>🔵</span>
                         Easy
                         <small>Mastered</small>
@@ -293,13 +379,14 @@
             </div>
 
 
-            <!-- NAVIGATION -->
+            <!-- ================= NAVIGATION ================= -->
 
             <div class="navigation">
 
                 <button
                     id="previous"
-                    class="nav-btn">
+                    class="nav-btn"
+                >
                     ← Previous
                 </button>
 
@@ -317,7 +404,8 @@
 
                 <button
                     id="next"
-                    class="nav-btn">
+                    class="nav-btn"
+                >
                     Next →
                 </button>
 
@@ -427,9 +515,13 @@
 
 <!-- ================= ADD WORD MODAL ================= -->
 
-<div id="addWordModal" class="modal hidden">
+<div
+    id="addWordModal"
+    class="modal hidden"
+>
 
     <div class="modal-overlay"></div>
+
 
     <div class="modal-box">
 
@@ -447,9 +539,11 @@
 
             </div>
 
+
             <button
                 id="closeModal"
-                class="close-modal">
+                class="close-modal"
+            >
                 ×
             </button>
 
@@ -459,47 +553,66 @@
         <form id="addWordForm">
 
             <label>
+
                 Word / Phrase
 
                 <input
                     id="newWord"
                     type="text"
                     placeholder="e.g. broaden one's horizons"
-                    required>
+                    required
+                >
+
             </label>
 
 
             <label>
+
                 Meaning
 
                 <input
                     id="newMeaning"
                     type="text"
                     placeholder="e.g. mở rộng tầm nhìn"
-                    required>
+                    required
+                >
+
             </label>
 
 
             <label>
+
                 Example sentence
 
                 <textarea
                     id="newExample"
-                    placeholder="e.g. Travelling can broaden one's horizons.">
-                </textarea>
+                    placeholder="e.g. Travelling can broaden one's horizons."
+                ></textarea>
 
             </label>
 
 
             <label>
+
                 Type
 
                 <select id="newType">
 
-                    <option>Vocabulary</option>
-                    <option>Phrasal Verb</option>
-                    <option>Collocation</option>
-                    <option>Idiom</option>
+                    <option>
+                        Vocabulary
+                    </option>
+
+                    <option>
+                        Phrasal Verb
+                    </option>
+
+                    <option>
+                        Collocation
+                    </option>
+
+                    <option>
+                        Idiom
+                    </option>
 
                 </select>
 
@@ -508,7 +621,8 @@
 
             <button
                 type="submit"
-                class="create-word-button">
+                class="create-word-button"
+            >
                 Add Word
             </button>
 
@@ -521,9 +635,13 @@
 
 <!-- ================= STUDY PLAN MODAL ================= -->
 
-<div id="studyPlanModal" class="modal hidden">
+<div
+    id="studyPlanModal"
+    class="modal hidden"
+>
 
     <div class="modal-overlay"></div>
+
 
     <div class="modal-box">
 
@@ -541,9 +659,11 @@
 
             </div>
 
+
             <button
                 id="closeStudyPlan"
-                class="close-modal">
+                class="close-modal"
+            >
                 ×
             </button>
 
@@ -561,7 +681,8 @@
                     type="number"
                     min="1"
                     max="100"
-                    value="10">
+                    value="10"
+                >
 
             </label>
 
@@ -575,7 +696,8 @@
                     type="number"
                     min="1"
                     max="365"
-                    value="15">
+                    value="15"
+                >
 
             </label>
 
@@ -595,7 +717,8 @@
 
             <button
                 id="saveStudyPlan"
-                class="create-word-button">
+                class="create-word-button"
+            >
                 Save Study Plan
             </button>
 
@@ -608,9 +731,13 @@
 
 <!-- ================= QUIZ MODAL ================= -->
 
-<div id="quizModal" class="modal hidden">
+<div
+    id="quizModal"
+    class="modal hidden"
+>
 
     <div class="modal-overlay"></div>
+
 
     <div class="modal-box quiz-box">
 
@@ -628,9 +755,11 @@
 
             </div>
 
+
             <button
                 id="closeQuiz"
-                class="close-modal">
+                class="close-modal"
+            >
                 ×
             </button>
 
@@ -643,203 +772,32 @@
                 What does this word mean?
             </span>
 
+
             <h2 id="quizWord">
                 give up
             </h2>
 
+
             <div
                 id="quizOptions"
-                class="quiz-options">
-            </div>
+                class="quiz-options"
+            ></div>
+
 
             <div
                 id="quizResult"
-                class="quiz-result">
-            </div>
+                class="quiz-result"
+            ></div>
+
 
             <button
                 id="nextQuiz"
-                class="create-word-button">
+                class="create-word-button"
+            >
                 Next Question
             </button>
 
         </div>
-
-    </div>
-
-</div>
-
-
-<!-- ================= THEME MODAL ================= -->
-
-<div id="themeModal" class="modal hidden">
-
-    <div class="modal-overlay"></div>
-
-    <div class="modal-box theme-box">
-
-        <div class="modal-header">
-
-            <div>
-
-                <h2>
-                    🎨 Customize Aldehyel Vocab
-                </h2>
-
-                <p>
-                    Choose your favorite accent color.
-                </p>
-
-            </div>
-
-            <button
-                id="closeTheme"
-                class="close-modal">
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="theme-content">
-
-            <p class="theme-title">
-                Preset colors
-            </p>
-
-
-            <div class="theme-presets">
-
-                <button
-                    class="theme-preset"
-                    data-color="#7054d8"
-                    style="--preview:#7054d8;">
-                    <span></span>
-                    Purple
-                </button>
-
-
-                <button
-                    class="theme-preset"
-                    data-color="#4778d8"
-                    style="--preview:#4778d8;">
-                    <span></span>
-                    Blue
-                </button>
-
-
-                <button
-                    class="theme-preset"
-                    data-color="#42a56b"
-                    style="--preview:#42a56b;">
-                    <span></span>
-                    Green
-                </button>
-
-
-                <button
-                    class="theme-preset"
-                    data-color="#d65d91"
-                    style="--preview:#d65d91;">
-                    <span></span>
-                    Pink
-                </button>
-
-
-                <button
-                    class="theme-preset"
-                    data-color="#d8873d"
-                    style="--preview:#d8873d;">
-                    <span></span>
-                    Orange
-                </button>
-
-            </div>
-
-
-            <p class="theme-title custom-title">
-                Custom color
-            </p>
-
-
-            <div class="custom-color-row">
-
-                <input
-                    id="customColor"
-                    type="color"
-                    value="#7054d8">
-
-                <span id="colorValue">
-                    #7054D8
-                </span>
-
-            </div>
-
-
-            <button
-                id="resetTheme"
-                class="reset-theme-button">
-                ↻ Reset to default
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ================= ADMIN / DELETE MODAL ================= -->
-
-<div id="deleteAllModal" class="modal hidden">
-
-    <div class="modal-overlay"></div>
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <div>
-
-                <h2>
-                    Delete original words
-                </h2>
-
-                <p>
-                    Remove the original vocabulary bank.
-                </p>
-
-            </div>
-
-            <button
-                id="closeDeleteAll"
-                class="close-modal">
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="danger-box">
-
-            <strong>
-                ⚠️ Warning
-            </strong>
-
-            <p>
-                This will delete all original Aldehyel
-                Vocab words from this browser.
-                Your custom words will stay.
-            </p>
-
-        </div>
-
-
-        <button
-            id="deleteAllOriginalButton"
-            class="danger-button">
-            🗑️ Delete All Original Words
-        </button>
 
     </div>
 
